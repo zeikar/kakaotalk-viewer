@@ -172,28 +172,9 @@
 .reply__column button i {
   opacity: 1;
 }
-.reply__column button:focus,
-.reply__column button:active {
-  outline: none;
-}
 
 .reply .reply__column:first-child,
 .reply .fa-smile-wink,
 .reply button {
   transition: opacity 0.3s ease-in-out;
-}
-
-.reply:focus-within .reply__column:first-child,
-.reply:focus-within .fa-smile-wink,
-.reply:focus-within button {
-  opacity: 0;
-}
-
-.reply input:focus {
-  width: 98vw;
-  transform: translateX(-13%) translateY(-80px);
-}
-
-.reply:focus-within {
-  transform: translateY(80px);
 }
