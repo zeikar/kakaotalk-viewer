@@ -1,0 +1,15 @@
+@import "reset.css";
+@import "chat.css";
+@import "variables.css";
+@import "header.css";
+
+body {
+  color: #2e363e;
+  font-family: "Open Sans", sans-serif;
+}
+
+.main-screen {
+  padding: 0px var(--horizontal-space);
+}
+
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap");
