@@ -41,10 +41,11 @@
   width: 50px;
   height: 50px;
   border-radius: 40%;
-  margin-right: 10px;
+  margin: 5px;
 }
 
 .message__author {
+  margin-top: 5px;
   margin-left: 10px;
   margin-bottom: 10px;
   display: block;
@@ -56,28 +57,34 @@
 }
 
 .message__bubble {
-  position: relative;
-  background-color: white;
+  filter:     drop-shadow(0px 1px 1px rgba(0, 0, 0, 0.3));
   padding: 10px;
   font-size: 18px;
   border-radius: 5px;
   margin-left: 10px;
-  margin-right: 10px;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  margin-right: 7px;
+  position: relative;
+  font-size: 18px;
+  background-color: white;
 }
 
-.message__bubble:after {
-  content: " ";
-  position: absolute;
-  width: 0;
+.message__bubble::before {
+  border: 5px solid transparent;
+  border-top: 5px solid white;
+  border-bottom: 0;
+  border-radius: 0 0 5px 0;
   height: 0;
-  top: 5px;
+  width: 0;
+  border-top-width: 10px;
+  content: "";
+  display: block;
+  position: absolute;
+  top: 10px;
   left: -10px;
   right: auto;
   bottom: auto;
-  border: 10px solid;
-  border-radius: 5px;
-  border-color: white white transparent transparent;
+  transform-origin: center;
+  transform: rotate(90deg) skew(-25deg);
 }
 
 .message__time,
@@ -88,24 +95,20 @@
 
 .message-row--own {
   justify-content: flex-end;
+  margin-left: 7px;
+  margin-right: 10px;
 }
 
 .message-row--own .message__bubble {
   background-color: var(--yellow);
 }
 
-.message-row--own .message__bubble:after {
-  content: " ";
-  position: absolute;
-  width: 0;
-  height: 0;
-  top: 5px;
+.message-row--own .message__bubble::before {
+  border-top: 5px solid var(--yellow);
+  border-top-width: 10px;
   left: auto;
   right: -10px;
-  bottom: auto;
-  border: 10px solid;
-  border-radius: 5px;
-  border-color: var(--yellow) transparent transparent var(--yellow);
+  transform: rotate(-90deg) skew(25deg);
 }
 
 .message-row--own .message__info {
