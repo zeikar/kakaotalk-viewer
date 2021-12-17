@@ -1,5 +1,6 @@
 import { readFile } from "./file.js";
 import { parseKakaoTalkText } from "./parser.js";
+import { displayChats } from "./renderer.js";
 
 const button = document.getElementById("button");
 button.addEventListener("click", startParsing);
@@ -13,5 +14,7 @@ async function startParsing() {
 
   const file = inputFile.files[0];
   const data = await readFile(file);
-  console.log(parseKakaoTalkText(data));
+  const chatData = parseKakaoTalkText(data);
+  console.log(chatData);
+  displayChats(chatData);
 }
