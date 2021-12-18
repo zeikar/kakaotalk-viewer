@@ -10,12 +10,9 @@
   background-color: #abc1d1;
   box-sizing: border-box;
 }
-.alt-header__column {
-  width: 33%;
-}
 
 .alt-header__title {
-  font-size: 28px;
+  font-size: 18px;
   font-weight: 600;
 }
 

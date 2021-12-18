@@ -11,10 +11,10 @@
     <body id="chat-screen">
       <header class="alt-header">
         <div class="alt-header__column">
-          <i class="fas fa-angle-left fa-3x"></i>
+          <i class="fas fa-angle-left fa-2x"></i>
         </div>
         <div class="alt-header__column">
-          <h1 id="chat-title" class="alt-header__title">니꼬</h1>
+          <h1 id="chat-title" class="alt-header__title">카카오톡 뷰어</h1>
         </div>
         <div class="alt-header__column">
           <span><i class="fas fa-search fa-lg"></i></span>
@@ -23,10 +23,26 @@
       </header>
 
       <main id="main-chat" class="main-screen main-chat">
-        <div class="chat__timestamp">Tuesday, June 30, 2020</div>
+        <div class="chat__timestamp"></div>
 
         <div class="message-row">
-          <img src="https://avatars3.githubusercontent.com/u/3612017" />
+          <div class="message__profile">
+            <svg viewBox="0 0 50 50">
+              <path
+                d="M25 0C43 0 50 7 50 25 50 43 43 50 25 50 7 50 0 43 0 25 0 7 7 0 25 0Z"
+                fill="#fae100"
+              ></path>
+              <text
+                class="default-txt"
+                x="50%"
+                y="50%"
+                dy="5"
+                text-anchor="middle"
+              >
+                Nicolas
+              </text>
+            </svg>
+          </div>
           <div class="message-row__content">
             <span class="message__author">Nicolas</span>
             <div class="message__info">

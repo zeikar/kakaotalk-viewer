@@ -5,6 +5,11 @@ import { displayChats } from "./renderer.js";
 const button = document.getElementById("button");
 button.addEventListener("click", startParsing);
 
+const chatTime = document.getElementsByClassName("chat__timestamp")[0];
+chatTime.innerText = `${new Date().getFullYear()}년 ${
+  new Date().getMonth() + 1
+}월 ${new Date().getDate()}일`;
+
 async function startParsing() {
   const inputFile = document.getElementById("file");
   if (inputFile.files.length === 0) {

@@ -1,6 +1,5 @@
 #chat-screen {
   background-color: #abc1d1;
-  height: 500vh;
 }
 
 @keyframes fadeIn {
@@ -25,10 +24,10 @@
 .chat__timestamp {
   color: white;
   background-color: #92a4b2;
-  padding: 15px;
+  padding: 10px;
   font-size: 14px;
-  border-radius: 25px;
-  margin-bottom: 25px;
+  border-radius: 20px;
+  margin-bottom: 15px;
 }
 
 .message-row {
@@ -37,11 +36,17 @@
   margin-bottom: 25px;
 }
 
-.message-row img {
+.message__profile {
   width: 50px;
   height: 50px;
-  border-radius: 40%;
   margin: 5px;
+  flex-shrink: 0;
+}
+
+.message-row__content {
+  max-width: calc(100% - 100px);
+  word-wrap: break-word;
+  word-break: break-all;
 }
 
 .message__author {
@@ -91,6 +96,7 @@
 .message__author {
   opacity: 0.8;
   font-size: 14px;
+  word-break: keep-all;
 }
 
 .message-row--own {
