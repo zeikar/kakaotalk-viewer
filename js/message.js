@@ -5,4 +5,8 @@ export class Message {
     this.time = time;
     this.text = text;
   }
+
+  clone() {
+    return new Message(this.userName, this.date, this.time, this.text);
+  }
 }

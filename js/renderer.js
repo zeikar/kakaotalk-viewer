@@ -10,11 +10,27 @@ export function displayChats(chat) {
 
   let currentDate = "";
   for (let i = 0; i < chat.messages.length; i++) {
-    const message = chat.messages[i];
+    const message = chat.messages[i].clone();
 
     if (message.date !== currentDate) {
       currentDate = message.date;
       mainChat.innerHTML += displayDate(message.date);
+    }
+
+    // 같은 시각의 메시지는 아래에 붙이기
+    if (
+      i > 0 &&
+      chat.messages[i - 1].userName === chat.messages[i].userName &&
+      chat.messages[i - 1].time === chat.messages[i].time
+    ) {
+      message.userName = "";
+    }
+    if (
+      i < chat.messages.length - 1 &&
+      chat.messages[i + 1].userName === chat.messages[i].userName &&
+      chat.messages[i + 1].time === chat.messages[i].time
+    ) {
+      message.time = "";
     }
 
     mainChat.innerHTML += displayChat(message);
@@ -30,6 +46,9 @@ function displayDate(date) {
 }
 
 function displayProfilePicture(userName) {
+  if (userName === "") {
+    return `<div class="message__profile"></div>`;
+  }
   return `<div class="message__profile">
     <svg viewBox="0 0 50 50">
       <path
@@ -50,11 +69,24 @@ function displayProfilePicture(userName) {
 }
 
 function displayMessage(message) {
+  if (message.userName === "") {
+    return `
+  <div class="message-row__content">
+    <div class="message__info">
+      <span class="message__bubble">${message.text.replaceAll(
+        "\n",
+        "<br />"
+      )}</span>
+      <span class="message__time">${message.time}</span>
+    </div>
+  </div>
+`;
+  }
   return `
   <div class="message-row__content">
     <span class="message__author">${message.userName}</span>
     <div class="message__info">
-      <span class="message__bubble">${message.text.replaceAll(
+      <span class="message__bubble tail">${message.text.replaceAll(
         "\n",
         "<br />"
       )}</span>

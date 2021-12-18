@@ -15,7 +15,7 @@
 
 .main-chat {
   margin-top: 50px;
-  margin-bottom: 50px;
+  margin-bottom: 70px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -28,18 +28,17 @@
   padding: 10px;
   font-size: 14px;
   border-radius: 20px;
-  margin-bottom: 15px;
+  margin: 15px;
 }
 
 .message-row {
   width: 100%;
   display: flex;
-  margin-bottom: 10px;
+  margin-bottom: 7px;
 }
 
 .message__profile {
   width: 50px;
-  height: 50px;
   margin: 5px;
   flex-shrink: 0;
 }
@@ -63,7 +62,7 @@
 }
 
 .message__bubble {
-  filter:     drop-shadow(0px 1px 1px rgba(0, 0, 0, 0.3));
+  filter: drop-shadow(0px 1px 1px rgba(0, 0, 0, 0.3));
   padding: 10px;
   font-size: 18px;
   border-radius: 5px;
@@ -74,7 +73,7 @@
   background-color: white;
 }
 
-.message__bubble::before {
+.message__bubble.tail::before {
   border: 5px solid transparent;
   border-top: 5px solid white;
   border-bottom: 0;
@@ -110,7 +109,7 @@
   background-color: var(--yellow);
 }
 
-.message-row--own .message__bubble::before {
+.message-row--own .message__bubble.tail::before {
   border-top: 5px solid var(--yellow);
   border-top-width: 10px;
   left: auto;
