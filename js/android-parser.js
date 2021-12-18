@@ -1,4 +1,5 @@
 import { Chat } from "./chat.js";
+import { convert12TimeTo24Time } from "./format.js";
 import { Message } from "./message.js";
 
 export function parseKakaoTalkText(text) {
@@ -29,7 +30,19 @@ export function parseKakaoTalkText(text) {
     // 날짜
     // 2020년 12월 7일 오후 4:38
     if (!line.includes(",")) {
-      date = line.replace(/^.*?(\d{4}년 \d{1,2}월 \d{1,2}일) .*$/, "$1");
+      const match = line.match(/^.*?(\d{4}년 \d{1,2}월 \d{1,2}일) .*$/);
+
+      // 연결되는 메시지
+      if (!match || match.length != 2) {
+        if (messages.length == 0) {
+          continue;
+        }
+
+        messages[messages.length - 1].text += "\n" + line;
+        continue;
+      }
+
+      date = match[1];
       continue;
     }
 
@@ -38,8 +51,17 @@ export function parseKakaoTalkText(text) {
       /^\d{4}년 \d{1,2}월 \d{1,2}일 (오전|오후) (\d{1,2}:\d{1,2}), (.*) : (.*)$/
     );
 
-    // 연결되는 메시지
     if (!match || match.length != 5) {
+      // 초대 메시지
+      if (
+        line.match(
+          /^\d{4}년 \d{1,2}월 \d{1,2}일 (오전|오후) (\d{1,2}:\d{1,2}), (.*)$/
+        )
+      ) {
+        continue;
+      }
+
+      // 연결되는 메시지
       if (messages.length == 0) {
         continue;
       }
@@ -48,13 +70,7 @@ export function parseKakaoTalkText(text) {
       continue;
     }
 
-    let messageTime = match[2];
-    if (match[1] == "오후") {
-      const hour = parseInt(messageTime.split(":")[0]);
-      if (hour < 12) {
-        messageTime = (hour + 12).toString() + ":" + messageTime.substr(2);
-      }
-    }
+    let messageTime = convert12TimeTo24Time(match[2], match[1]);
     const userName = match[3];
     const messageText = match[4];
 

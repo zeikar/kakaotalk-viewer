@@ -14,3 +14,23 @@ export function getCurrentTime() {
 
   return `${hour}:${minute}`;
 }
+
+// "4:38" => "16:38"
+export function convert12TimeTo24Time(time, ampm) {
+  const hour = parseInt(time.split(":")[0]);
+  const minute = time.split(":")[1];
+
+  let convertedHour = hour;
+
+  if (ampm == "오전") {
+    if (hour == 12) {
+      convertedHour = 0;
+    }
+  } else {
+    if (hour != 12) {
+      convertedHour += 12;
+    }
+  }
+
+  return `${convertedHour.toString().padStart(2, "0")}:${minute}`;
+}
