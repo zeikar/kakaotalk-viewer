@@ -18,8 +18,15 @@ export class App {
   }
 
   async generateChatDataFromFile(file) {
-    const data = await readFile(file);
-    this.chatData = parseKakaoTalkText(data);
+    const raw = await readFile(file);
+    const chatData = parseKakaoTalkText(raw);
+    console.log(chatData);
+
+    if (chatData === null) {
+      throw new Error("지원하지 않는 파일 형식입니다.");
+    }
+
+    this.chatData = chatData;
   }
 
   display() {
