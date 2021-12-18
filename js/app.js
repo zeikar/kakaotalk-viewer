@@ -1,12 +1,16 @@
 import { Chat } from "./chat.js";
 import { readFile } from "./file.js";
 import { parseKakaoTalkText } from "./parser.js";
-import { displayChats } from "./renderer.js";
+import { Renderer } from "./renderer.js";
 import { generateTutorialMessages } from "./tutorial.js";
+
+const renderMessagesSize = 10;
 
 export class App {
   constructor() {
     this.chatData = new Chat();
+    this.renderer = new Renderer();
+    this.lastMessageIndex = 0;
   }
 
   addMessage(username, message) {
@@ -14,6 +18,7 @@ export class App {
   }
 
   generateTutorialChatData() {
+    this.lastMessageIndex = 0;
     this.chatData = generateTutorialMessages();
   }
 
@@ -25,12 +30,13 @@ export class App {
     if (chatData === null) {
       throw new Error("지원하지 않는 파일 형식입니다.");
     }
-
+    this.lastMessageIndex = 0;
     this.chatData = chatData;
   }
 
   display() {
-    displayChats(this.chatData);
+    this.renderer.startRenderingChat(this.chatData);
+    this.loadMoreChatMessages();
   }
 
   async startParsing() {
@@ -54,5 +60,23 @@ export class App {
       this.addMessage("카카오톡 뷰어", `파일 읽기 실패: ${error.message}`);
     }
     this.display();
+  }
+
+  updateScroll(scrollTop, scrollHeight, clientHeight) {
+    if (
+      scrollTop + clientHeight >= scrollHeight - scrollHeight * 0.1 &&
+      this.hasMoreChatMessages()
+    ) {
+      this.loadMoreChatMessages();
+    }
+  }
+
+  hasMoreChatMessages() {
+    return this.lastMessageIndex < this.chatData.messages.length - 1;
+  }
+
+  loadMoreChatMessages() {
+    this.renderer.renderMoreMessages(this.lastMessageIndex, renderMessagesSize);
+    this.lastMessageIndex += renderMessagesSize;
   }
 }

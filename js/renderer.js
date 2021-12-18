@@ -1,39 +1,53 @@
-export function displayChats(chat) {
-  const chatTitle = document.getElementById("chat-title");
-  const mainChat = document.getElementById("main-chat");
+export class Renderer {
+  constructor() {
+    this.chatTitle = document.getElementById("chat-title");
+    this.mainChat = document.getElementById("main-chat");
+  }
 
-  // 채팅방 제목
-  chatTitle.innerText = displayChatroomTitle(chat);
+  startRenderingChat(chat) {
+    window.scrollTo(0, 0);
+    this.chat = chat;
+    this.renderedMessages = 0;
+    this.currentDate = "";
 
-  // 채팅방 메시지
-  mainChat.innerHTML = "";
+    // 채팅방 제목
+    this.chatTitle.innerText = displayChatroomTitle(chat);
 
-  let currentDate = "";
-  for (let i = 0; i < chat.messages.length; i++) {
-    const message = chat.messages[i].clone();
+    // 채팅방 메시지
+    this.mainChat.innerHTML = "";
+  }
 
-    if (message.date !== currentDate) {
-      currentDate = message.date;
-      mainChat.innerHTML += displayDate(message.date);
+  renderMoreMessages(startIndex, size) {
+    for (let i = startIndex; i < startIndex + size; i++) {
+      if (i >= this.chat.messages.length) {
+        break;
+      }
+
+      const message = this.chat.messages[i].clone();
+
+      if (message.date !== this.currentDate) {
+        this.currentDate = message.date;
+        this.mainChat.innerHTML += displayDate(message.date);
+      }
+
+      // 같은 시각의 메시지는 아래에 붙이기
+      if (
+        i > 0 &&
+        this.chat.messages[i - 1].userName === this.chat.messages[i].userName &&
+        this.chat.messages[i - 1].time === this.chat.messages[i].time
+      ) {
+        message.userName = "";
+      }
+      if (
+        i < this.chat.messages.length - 1 &&
+        this.chat.messages[i + 1].userName === this.chat.messages[i].userName &&
+        this.chat.messages[i + 1].time === this.chat.messages[i].time
+      ) {
+        message.time = "";
+      }
+
+      this.mainChat.innerHTML += displayChat(message);
     }
-
-    // 같은 시각의 메시지는 아래에 붙이기
-    if (
-      i > 0 &&
-      chat.messages[i - 1].userName === chat.messages[i].userName &&
-      chat.messages[i - 1].time === chat.messages[i].time
-    ) {
-      message.userName = "";
-    }
-    if (
-      i < chat.messages.length - 1 &&
-      chat.messages[i + 1].userName === chat.messages[i].userName &&
-      chat.messages[i + 1].time === chat.messages[i].time
-    ) {
-      message.time = "";
-    }
-
-    mainChat.innerHTML += displayChat(message);
   }
 }
 
