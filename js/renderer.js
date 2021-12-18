@@ -1,14 +1,15 @@
-export function displayChats(result) {
+export function displayChats(chat) {
   const chatTitle = document.getElementById("chat-title");
   const mainChat = document.getElementById("main-chat");
 
-  chatTitle.innerText = result.roomName;
+  // 채팅방 제목
+  chatTitle.innerText = `${chat.roomName} (${chat.users.length})`;
 
   mainChat.innerHTML = "";
 
   let currentDate = "";
-  for (let i = 0; i < result.messages.length; i++) {
-    const message = result.messages[i];
+  for (let i = 0; i < chat.messages.length; i++) {
+    const message = chat.messages[i];
 
     if (message.date !== currentDate) {
       currentDate = message.date;

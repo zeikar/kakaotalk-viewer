@@ -1,9 +1,10 @@
+import { Chat } from "./chat.js";
+import { Message } from "./message.js";
+
 export function parseKakaoTalkText(text) {
-  const result = {
-    roomName: "",
-    users: [],
-    messages: [],
-  };
+  let roomName = "";
+  let users = [];
+  let messages = [];
 
   const lines = text.split(/\r?\n/);
 
@@ -14,7 +15,7 @@ export function parseKakaoTalkText(text) {
 
   // 채팅방 이름
   // 채팅방 이름 님과 카카오톡 대화
-  result.roomName = lines[0].replace(/(.*) 님과 카카오톡 대화/, "$1");
+  roomName = lines[0].replace(/(.*) 님과 카카오톡 대화/, "$1");
 
   let date = "";
 
@@ -36,11 +37,11 @@ export function parseKakaoTalkText(text) {
 
     // 연결되는 메시지
     if (!match || match.length != 4) {
-      if (result.messages.length == 0) {
+      if (messages.length == 0) {
         continue;
       }
 
-      result.messages[result.messages.length - 1].text += "\n" + line;
+      messages[messages.length - 1].text += "\n" + line;
       continue;
     }
 
@@ -49,18 +50,13 @@ export function parseKakaoTalkText(text) {
     const messageText = match[3];
 
     // 사용자를 추가한다
-    if (!result.users.includes(userName)) {
-      result.users.push(userName);
+    if (!users.includes(userName)) {
+      users.push(userName);
     }
 
     // 메시지를 추가한다
-    result.messages.push({
-      userName: userName,
-      date: date,
-      time: messageTime,
-      text: messageText,
-    });
+    messages.push(new Message(userName, date, messageTime, messageText));
   }
 
-  return result;
+  return new Chat(roomName, users, messages);
 }
