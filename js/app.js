@@ -25,4 +25,27 @@ export class App {
   display() {
     displayChats(this.chatData);
   }
+
+  async startParsing() {
+    const inputFile = document.getElementById("file");
+    if (inputFile.files.length === 0) {
+      alert("파일을 선택해주세요.");
+      return;
+    }
+
+    const file = inputFile.files[0];
+
+    this.addMessage(
+      "카카오톡 뷰어",
+      `${file.name} 파일을 읽는 중입니다... 잠시만 기다려 주세요`
+    );
+    this.display();
+
+    try {
+      await this.generateChatDataFromFile(file);
+    } catch (error) {
+      this.addMessage("카카오톡 뷰어", `파일 읽기 실패: ${error.message}`);
+    }
+    this.display();
+  }
 }

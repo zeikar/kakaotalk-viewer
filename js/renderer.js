@@ -3,8 +3,9 @@ export function displayChats(chat) {
   const mainChat = document.getElementById("main-chat");
 
   // 채팅방 제목
-  chatTitle.innerText = `${chat.roomName} (${chat.users.length})`;
+  chatTitle.innerText = displayChatroomTitle(chat);
 
+  // 채팅방 메시지
   mainChat.innerHTML = "";
 
   let currentDate = "";
@@ -13,14 +14,22 @@ export function displayChats(chat) {
 
     if (message.date !== currentDate) {
       currentDate = message.date;
-      mainChat.innerHTML += `<div class="chat__timestamp">${currentDate}</div>`;
+      mainChat.innerHTML += displayDate(message.date);
     }
 
-    mainChat.innerHTML += createChat(message);
+    mainChat.innerHTML += displayChat(message);
   }
 }
 
-function createProfilePicture(userName) {
+function displayChatroomTitle(chat) {
+  return `${chat.roomName} (${chat.users.length})`;
+}
+
+function displayDate(date) {
+  return `<div class="chat__timestamp">${date}</div>`;
+}
+
+function displayProfilePicture(userName) {
   return `<div class="message__profile">
     <svg viewBox="0 0 50 50">
       <path
@@ -34,13 +43,13 @@ function createProfilePicture(userName) {
         dy="5"
         text-anchor="middle"
       >
-        ${userName}
+        ${userName.slice(0, 3).toUpperCase()}
       </text>
     </svg>
   </div>`;
 }
 
-function createMessage(message) {
+function displayMessage(message) {
   return `
   <div class="message-row__content">
     <span class="message__author">${message.userName}</span>
@@ -55,9 +64,9 @@ function createMessage(message) {
 `;
 }
 
-function createChat(message) {
+function displayChat(message) {
   return `<div class="message-row">
-    ${createProfilePicture(message.userName)}
-    ${createMessage(message)}
+    ${displayProfilePicture(message.userName)}
+    ${displayMessage(message)}
   </div>`;
 }
