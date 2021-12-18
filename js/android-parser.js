@@ -16,7 +16,10 @@ export function parseKakaoTalkText(text) {
 
   // 채팅방 이름
   // 채팅방 이름 (님과) 카카오톡 대화
-  roomName = lines[0].replace(/(.*)( 님과)? 카카오톡 대화/, "$1");
+  roomName = lines[0].replace(/(.*) 카카오톡 대화/, "$1");
+  if (roomName.endsWith("님과")) {
+    roomName = roomName.substring(0, roomName.length - 3);
+  }
 
   let date = "";
 
@@ -30,7 +33,7 @@ export function parseKakaoTalkText(text) {
     // 날짜
     // 2020년 12월 7일 오후 4:38
     if (!line.includes(",")) {
-      const match = line.match(/^.*?(\d{4}년 \d{1,2}월 \d{1,2}일) .*$/);
+      const match = line.match(/^(\d{4}년 \d{1,2}월 \d{1,2}일) .*$/);
 
       // 연결되는 메시지
       if (!match || match.length != 2) {
