@@ -35,8 +35,13 @@ export function parseKakaoTalkText(text) {
     // [사용자 이름] [메시지 시각] 메시지
     const match = line.match(/^\[(.*)\] \[(\d{1,2}:\d{1,2})\] (.*)$/);
 
-    // 연결되는 메시지
+    // 연결되는 메시지 or 초대/나감 메시지
     if (!match || match.length != 4) {
+      if (line.endsWith("님을 초대하였습니다.") || line.endsWith("님이 나갔습니다.")) {
+        messages.push(new Message("", date, "", "notification", line));
+        continue;
+      }
+
       if (messages.length == 0) {
         continue;
       }

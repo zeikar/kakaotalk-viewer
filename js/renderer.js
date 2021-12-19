@@ -51,7 +51,7 @@ export class Renderer {
         message.time = "";
       }
 
-      this.mainChat.appendChild(displayChat(message));
+      this.mainChat.appendChild(displayMessage(message));
     }
   }
 }
@@ -110,7 +110,7 @@ function displayProfilePicture(userName) {
   return messageProfile;
 }
 
-function displayMessage(message) {
+function displayMessageContent(message) {
   if (message.userName === "") {
     const messageContent = document.createElement("div");
     messageContent.classList.add("message-row__content");
@@ -214,7 +214,11 @@ function displayMessageText(message) {
   return document.createElement("span");
 }
 
-function displayChat(message) {
+function displayMessage(message) {
+  if (message.messageType == "notification") {
+    return displayDate(message.text);
+  }
+
   const messageRow = document.createElement("div");
 
   // 자기 자신의 메시지
@@ -230,7 +234,7 @@ function displayChat(message) {
     const messageProfile = displayProfilePicture(message.userName);
     messageRow.appendChild(messageProfile);
 
-    const messageContent = displayMessage(message);
+    const messageContent = displayMessageContent(message);
     messageRow.appendChild(messageContent);
   }
 

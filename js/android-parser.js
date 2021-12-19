@@ -55,12 +55,12 @@ export function parseKakaoTalkText(text) {
     );
 
     if (!match || match.length != 5) {
-      // 초대 메시지
-      if (
-        line.match(
-          /^\d{4}년 \d{1,2}월 \d{1,2}일 (오전|오후) (\d{1,2}:\d{1,2}), (.*)$/
-        )
-      ) {
+      // 초대/나감 메시지
+      const notiMatch = line.match(
+        /^\d{4}년 \d{1,2}월 \d{1,2}일 (오전|오후) \d{1,2}:\d{1,2}, (.*)$/
+      );
+      if (notiMatch) {
+        messages.push(new Message("", date, "", "notification", notiMatch[2]));
         continue;
       }
 
@@ -83,7 +83,9 @@ export function parseKakaoTalkText(text) {
     }
 
     // 메시지를 추가한다
-    messages.push(new Message(userName, date, messageTime, "plain", messageText));
+    messages.push(
+      new Message(userName, date, messageTime, "plain", messageText)
+    );
   }
 
   return new Chat(roomName, users, messages);
