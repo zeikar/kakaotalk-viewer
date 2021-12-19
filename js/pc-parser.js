@@ -29,6 +29,7 @@ export function parseKakaoTalkText(text) {
       line.endsWith("---------------")
     ) {
       date = line.replace(/^.*?(\d{4}년 \d{1,2}월 \d{1,2}일) .*$/, "$1");
+      messages.push(new Message("", date, "", "notification", date));
       continue;
     }
 
@@ -37,7 +38,10 @@ export function parseKakaoTalkText(text) {
 
     // 연결되는 메시지 or 초대/나감 메시지
     if (!match || match.length != 4) {
-      if (line.endsWith("님을 초대하였습니다.") || line.endsWith("님이 나갔습니다.")) {
+      if (
+        line.endsWith("님을 초대하였습니다.") ||
+        line.endsWith("님이 나갔습니다.")
+      ) {
         messages.push(new Message("", date, "", "notification", line));
         continue;
       }
@@ -60,7 +64,9 @@ export function parseKakaoTalkText(text) {
     }
 
     // 메시지를 추가한다
-    messages.push(new Message(userName, date, messageTime, "plain", messageText));
+    messages.push(
+      new Message(userName, date, messageTime, "plain", messageText)
+    );
   }
 
   return new Chat(roomName, users, messages);

@@ -8,6 +8,13 @@ export function generateTutorialMessages() {
     ["카카오톡 뷰어"],
     [
       new Message(
+        "",
+        getCurrentDate(),
+        getCurrentTime(),
+        "notification",
+        getCurrentDate()
+      ),
+      new Message(
         "카카오톡 뷰어",
         getCurrentDate(),
         getCurrentTime(),

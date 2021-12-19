@@ -46,6 +46,7 @@ export function parseKakaoTalkText(text) {
       }
 
       date = match[1];
+      messages.push(new Message("", date, "", "notification", date));
       continue;
     }
 

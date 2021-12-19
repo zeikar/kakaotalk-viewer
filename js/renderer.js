@@ -25,11 +25,6 @@ export class Renderer {
 
       const message = this.chat.messages[i].clone();
 
-      if (message.date !== this.currentDate) {
-        this.currentDate = message.date;
-        this.mainChat.appendChild(displayDate(message.date));
-      }
-
       // 자기 자신의 메시지
       if (message.userName === this.chat.owner) {
         message.ownMessage = true;
@@ -60,11 +55,11 @@ function displayChatroomTitle(chat) {
   return `${chat.roomName} (${chat.users.length})`;
 }
 
-function displayDate(date) {
-  const dateContainer = document.createElement("div");
-  dateContainer.classList.add("chat__timestamp");
-  dateContainer.innerText = date;
-  return dateContainer;
+function displayNotification(text) {
+  const container = document.createElement("div");
+  container.classList.add("chat__timestamp");
+  container.innerText = text;
+  return container;
 }
 
 function displayProfilePicture(userName) {
@@ -216,7 +211,7 @@ function displayMessageText(message) {
 
 function displayMessage(message) {
   if (message.messageType == "notification") {
-    return displayDate(message.text);
+    return displayNotification(message.text);
   }
 
   const messageRow = document.createElement("div");
