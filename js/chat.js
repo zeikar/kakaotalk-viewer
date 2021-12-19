@@ -10,7 +10,20 @@ export class Chat {
 
   addMessage(username, text) {
     this.messages.push(
-      new Message(username, getCurrentDate(), getCurrentTime(), text)
+      new Message(username, getCurrentDate(), getCurrentTime(), "plain", text)
     );
+  }
+
+  addMessageWithOptions(username, options, callback) {
+    this.messages.push(
+      new Message(username, getCurrentDate(), getCurrentTime(), "select", "", {
+        options,
+        callback,
+      })
+    );
+  }
+
+  setOwner(username) {
+    this.owner = username;
   }
 }

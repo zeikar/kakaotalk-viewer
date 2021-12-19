@@ -11,6 +11,7 @@ export function generateTutorialMessages() {
         "카카오톡 뷰어",
         getCurrentDate(),
         getCurrentTime(),
+        "plain",
         `안녕하세요. 카카오톡 뷰어입니다.
         
         아래 메시지 입력 창에 내보내기한 텍스트 파일을 올려주세요.`

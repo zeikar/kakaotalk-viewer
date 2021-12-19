@@ -83,7 +83,7 @@ export function parseKakaoTalkText(text) {
     }
 
     // 메시지를 추가한다
-    messages.push(new Message(userName, date, messageTime, messageText));
+    messages.push(new Message(userName, date, messageTime, "plain", messageText));
   }
 
   return new Chat(roomName, users, messages);

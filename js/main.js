@@ -18,5 +18,5 @@ window.addEventListener(
   }
 );
 
-await app.generateTutorialChatData();
+app.generateTutorialChatData();
 app.display();
