@@ -1,5 +1,6 @@
 import { getCurrentDate, getCurrentTime } from "./format.js";
 import { Message } from "./message.js";
+import { MessageFactory } from "./messages/message-factory.js";
 
 export class Chat {
   constructor(roomName, users, messages) {
@@ -10,16 +11,24 @@ export class Chat {
 
   addMessage(username, text) {
     this.messages.push(
-      new Message(username, getCurrentDate(), getCurrentTime(), "plain", text)
+      MessageFactory.createPlainMessage(
+        username,
+        getCurrentDate(),
+        getCurrentTime(),
+        text
+      )
     );
   }
 
   addMessageWithOptions(username, options, callback) {
     this.messages.push(
-      new Message(username, getCurrentDate(), getCurrentTime(), "select", "", {
+      MessageFactory.createSelectMessage(
+        username,
+        getCurrentDate(),
+        getCurrentTime(),
         options,
-        callback,
-      })
+        callback
+      )
     );
   }
 

@@ -4,7 +4,7 @@ import { parseKakaoTalkText } from "./parser.js";
 import { Renderer } from "./renderer.js";
 import { generateTutorialMessages } from "./tutorial.js";
 
-const renderMessagesSize = 10;
+const renderMessagesSize = 20;
 
 export class App {
   constructor() {

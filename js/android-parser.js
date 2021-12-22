@@ -1,6 +1,7 @@
 import { Chat } from "./chat.js";
 import { convert12TimeTo24Time } from "./format.js";
 import { Message } from "./message.js";
+import { MessageFactory } from "./messages/message-factory.js";
 
 export function parseKakaoTalkText(text) {
   let roomName = "";
@@ -46,7 +47,7 @@ export function parseKakaoTalkText(text) {
       }
 
       date = match[1];
-      messages.push(new Message("", date, "", "notification", date));
+      messages.push(MessageFactory.createNotificationMessage(date, date));
       continue;
     }
 
@@ -61,7 +62,9 @@ export function parseKakaoTalkText(text) {
         /^\d{4}년 \d{1,2}월 \d{1,2}일 (오전|오후) \d{1,2}:\d{1,2}, (.*)$/
       );
       if (notiMatch) {
-        messages.push(new Message("", date, "", "notification", notiMatch[2]));
+        messages.push(
+          MessageFactory.createNotificationMessage(date, notiMatch[2])
+        );
         continue;
       }
 
@@ -85,7 +88,12 @@ export function parseKakaoTalkText(text) {
 
     // 메시지를 추가한다
     messages.push(
-      new Message(userName, date, messageTime, "plain", messageText)
+      MessageFactory.createPlainMessage(
+        userName,
+        date,
+        messageTime,
+        messageText
+      )
     );
   }
 
