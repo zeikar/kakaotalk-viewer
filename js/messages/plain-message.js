@@ -11,7 +11,6 @@ export class PlainMessage extends Message {
     let index = 0;
 
     const urls = captureUrls(this.text);
-    console.log(urls);
     urls.forEach((url) => {
       const urlIndex = this.text.indexOf(url, index);
       const textBeforeUrl = this.text.substring(index, urlIndex);
