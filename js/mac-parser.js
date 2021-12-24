@@ -34,7 +34,7 @@ export function parseKakaoTalkText(text) {
       const user2 = inviteMatch[2];
       messages.push(
         MessageFactory.createNotificationMessage(
-          time,
+          date,
           `${user1}님이 ${user2}님을 초대하였습니다.`
         )
       );
