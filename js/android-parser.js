@@ -1,6 +1,5 @@
 import { Chat } from "./chat.js";
 import { convert12TimeTo24Time } from "./format.js";
-import { Message } from "./message.js";
 import { MessageFactory } from "./messages/message-factory.js";
 
 export function parseKakaoTalkText(text) {

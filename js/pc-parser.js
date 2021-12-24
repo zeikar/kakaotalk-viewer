@@ -1,5 +1,5 @@
 import { Chat } from "./chat.js";
-import { Message } from "./message.js";
+import { MessageFactory } from "./messages/message-factory.js";
 
 export function parseKakaoTalkText(text) {
   let roomName = "";
@@ -29,7 +29,7 @@ export function parseKakaoTalkText(text) {
       line.endsWith("---------------")
     ) {
       date = line.replace(/^.*?(\d{4}년 \d{1,2}월 \d{1,2}일) .*$/, "$1");
-      messages.push(new Message("", date, "", "notification", date));
+      messages.push(MessageFactory.createNotificationMessage(date, date));
       continue;
     }
 
@@ -42,7 +42,7 @@ export function parseKakaoTalkText(text) {
         line.endsWith("님을 초대하였습니다.") ||
         line.endsWith("님이 나갔습니다.")
       ) {
-        messages.push(new Message("", date, "", "notification", line));
+        messages.push(MessageFactory.createNotificationMessage(date, line));
         continue;
       }
 
@@ -65,7 +65,7 @@ export function parseKakaoTalkText(text) {
 
     // 메시지를 추가한다
     messages.push(
-      new Message(userName, date, messageTime, "plain", messageText)
+      MessageFactory.createPlainMessage(userName, date, messageTime, messageText)
     );
   }
 
