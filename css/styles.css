@@ -2,8 +2,14 @@
 @import "chat.css";
 @import "variables.css";
 @import "header.css";
+@import "sidemenu.css";
+
+html {
+  height: 100%;
+}
 
 body {
+  height: calc(100% - 50px);
   color: #2e363e;
   font-family: "Open Sans", sans-serif;
 }
