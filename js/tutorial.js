@@ -1,5 +1,5 @@
 import { Chat } from "./chat.js";
-import { getCurrentDate, getCurrentTime } from "./format.js";
+import { getCurrentDate, getCurrentTime } from "./lib/format.js";
 import { MessageFactory } from "./messages/message-factory.js";
 
 export function generateTutorialMessages() {
