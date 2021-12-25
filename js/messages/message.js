@@ -1,3 +1,5 @@
+import { generateColorByUserName, getTextColorByBackgroundColor } from "../lib/color.js";
+
 export class Message {
   constructor(username, date, time, text) {
     this.username = username;
@@ -27,7 +29,7 @@ export class Message {
     if (this.isMine) {
       messageRow.classList.add("message-row--own");
     } else {
-      const messageProfile = this.createProfilePictureDomElement(this.userName);
+      const messageProfile = this.createProfilePictureDomElement();
       messageRow.appendChild(messageProfile);
     }
 
@@ -91,7 +93,8 @@ export class Message {
       "d",
       "M25 0C43 0 50 7 50 25 50 43 43 50 25 50 7 50 0 43 0 25 0 7 7 0 25 0Z"
     );
-    profileSquarcle.setAttribute("fill", "#fae100");
+    const profileColor = generateColorByUserName(this.username);
+    profileSquarcle.setAttribute("fill", profileColor);
 
     const profileText = document.createElementNS(
       "http://www.w3.org/2000/svg",
@@ -101,6 +104,7 @@ export class Message {
     profileText.setAttribute("y", "50%");
     profileText.setAttribute("dy", "5");
     profileText.setAttribute("text-anchor", "middle");
+    profileText.setAttribute("fill", getTextColorByBackgroundColor(profileColor));
     profileText.innerHTML = this.username.slice(0, 3).toUpperCase();
 
     profileContainer.appendChild(profileSquarcle);
