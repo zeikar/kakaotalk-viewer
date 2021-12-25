@@ -1,5 +1,5 @@
-import { Chat } from "./chat.js";
-import { MessageFactory } from "./messages/message-factory.js";
+import { Chat } from "../chat.js";
+import { MessageFactory } from "../messages/message-factory.js";
 
 export function parseKakaoTalkText(text) {
   let roomName = "";

@@ -1,6 +1,6 @@
 import { Chat } from "./chat.js";
 import { readFile } from "./file.js";
-import { parseKakaoTalkText } from "./parser.js";
+import { parseKakaoTalkText } from "./parser/parser.js";
 import { Renderer } from "./renderer.js";
 import { generateTutorialMessages } from "./tutorial.js";
 

@@ -1,6 +1,6 @@
-import { Chat } from "./chat.js";
-import { convert12TimeTo24Time } from "./format.js";
-import { MessageFactory } from "./messages/message-factory.js";
+import { Chat } from "../chat.js";
+import { convert12TimeTo24Time } from "../format.js";
+import { MessageFactory } from "../messages/message-factory.js";
 
 export function parseKakaoTalkText(text) {
   let roomName = "";
