@@ -16,6 +16,12 @@ describe("splitByUrls", () => {
     ]);
   });
 
+  test("does not emit empty text around a URL-only message", () => {
+    expect(splitByUrls("https://example.com")).toEqual([
+      { kind: "url", value: "https://example.com" },
+    ]);
+  });
+
   test("splits multiple URLs in one message", () => {
     expect(splitByUrls("a http://one.test b https://two.test/path?q=1 c")).toEqual([
       { kind: "text", value: "a " },

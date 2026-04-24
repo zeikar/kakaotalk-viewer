@@ -10,7 +10,7 @@ export function splitByUrls(text: string): TextSegment[] {
 
   for (const match of text.matchAll(URL_REGEX)) {
     const url = match[0];
-    const start = match.index ?? 0;
+    const start = match.index!;
 
     if (start > lastIndex) {
       segments.push({ kind: "text", value: text.slice(lastIndex, start) });

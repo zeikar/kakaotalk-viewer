@@ -25,7 +25,7 @@ Preact + TypeScript + Vite + Tailwind, virtualized list via [react-virtuoso](htt
 ```sh
 npm install
 npm run dev      # http://localhost:5173/kakaotalk-viewer/
-npm test
+npm test         # unit tests + coverage thresholds
 npm run build    # type-check + production build to ./dist
 npm run preview  # serve ./dist locally
 ```
