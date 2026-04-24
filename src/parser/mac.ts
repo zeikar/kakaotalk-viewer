@@ -36,7 +36,7 @@ export function parseMac(text: string): Chat | null {
       continue;
     }
 
-    if (!users.includes(user)) users.push(user);
+    if (user.trim().length > 0 && !users.includes(user)) users.push(user);
 
     messages.push({
       kind: "plain",

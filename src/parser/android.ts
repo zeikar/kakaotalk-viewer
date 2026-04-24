@@ -56,7 +56,9 @@ export function parseAndroid(text: string): Chat | null {
     const username = messageMatch[3];
     const text = messageMatch[4];
 
-    if (!users.includes(username)) users.push(username);
+    if (username.trim().length > 0 && !users.includes(username)) {
+      users.push(username);
+    }
 
     const msg: PlainMessage = {
       kind: "plain",

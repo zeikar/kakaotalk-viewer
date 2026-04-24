@@ -23,6 +23,7 @@ describe("parseAndroid", () => {
 
 
 2021년 12월 29일 오후 8:36
+2021년 12월 29일 오후 8:35,  : 시스템 알림
 2021년 12월 29일 오후 8:36, 테스트 : ㅎㅇ
 이어지는 줄
 2021년 12월 29일 오후 8:37, 나 : 반가워
@@ -36,6 +37,13 @@ describe("parseAndroid", () => {
           kind: "notification",
           date: "2021년 12월 29일",
           text: "2021년 12월 29일",
+        },
+        {
+          kind: "plain",
+          username: "",
+          date: "2021년 12월 29일",
+          time: "20:35",
+          text: "시스템 알림",
         },
         {
           kind: "plain",

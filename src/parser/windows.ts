@@ -42,7 +42,7 @@ export function parseWindows(text: string): Chat | null {
 
     const [, username, time, text] = messageMatch;
 
-    if (!users.includes(username)) {
+    if (username.trim().length > 0 && !users.includes(username)) {
       users.push(username);
     }
 

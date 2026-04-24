@@ -4,13 +4,18 @@ interface Props {
 }
 
 export function SelectMessageBody({ options, onSelect }: Props) {
+  const selectableOptions = options.filter((option) => option.trim().length > 0);
+
   return (
     <select
       class="rounded border px-2 py-1 text-base"
+      defaultValue=""
       onChange={(e) => onSelect((e.target as HTMLSelectElement).value)}
     >
-      <option value="">-</option>
-      {options.map((opt) => (
+      <option value="" disabled hidden>
+        선택
+      </option>
+      {selectableOptions.map((opt) => (
         <option key={opt} value={opt}>
           {opt}
         </option>

@@ -24,6 +24,7 @@ export function MessageRow({
   }
 
   const username = message.username;
+  const displayName = username.trim().length > 0 ? username : "알 수 없음";
   const bubbleColor = isMine ? "bg-kakao-yellow" : "bg-white";
   const rowDir = isMine ? "flex-row-reverse" : "";
   const timePosition = isMine ? "right-full mr-1" : "left-full ml-1";
@@ -36,14 +37,14 @@ export function MessageRow({
     <div class={`flex w-full px-2 pb-1.5 ${rowDir}`}>
       {!isMine &&
         (isFirst ? (
-          <ProfileAvatar username={username} />
+          <ProfileAvatar username={displayName} />
         ) : (
           <ProfileAvatarPlaceholder />
         ))}
 
       <div class="flex flex-col max-w-[calc(80%-3rem)] min-w-0">
         {!isMine && isFirst && (
-          <div class="text-sm opacity-80 ml-2 mb-1">{username}</div>
+          <div class="text-sm opacity-80 ml-2 mb-1">{displayName}</div>
         )}
 
         <div class="relative flex items-end min-w-0">
