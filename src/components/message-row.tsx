@@ -33,7 +33,7 @@ export function MessageRow({
   const tail = isFirst ? (isMine ? "bubble-tail-right" : "bubble-tail-left") : "";
 
   return (
-    <div class={`flex w-full mb-1.5 px-2 ${rowDir}`}>
+    <div class={`flex w-full px-2 pb-1.5 ${rowDir}`}>
       {!isMine &&
         (isFirst ? (
           <ProfileAvatar username={username} />

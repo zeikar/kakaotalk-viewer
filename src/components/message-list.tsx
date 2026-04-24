@@ -16,6 +16,10 @@ export function MessageList({ messages, owner, onSelectOwner }: Props) {
       initialTopMostItemIndex={Math.max(0, messages.length - 1)}
       followOutput="auto"
       increaseViewportBy={400}
+      components={{
+        Header: () => <div class="h-2" />,
+        Footer: () => <div class="h-3" />,
+      }}
       computeItemKey={(index, msg) => `${index}-${msg.kind}`}
       itemContent={(index, msg) => (
         <MessageRow
