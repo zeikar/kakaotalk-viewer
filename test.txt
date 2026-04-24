@@ -1,0 +1,23 @@
+테스트 님과 카카오톡 대화
+저장한 날짜 : 2021년 12월 18일 오후 7:17
+
+
+2021년 12월 29일 오후 8:36
+2021년 12월 29일 오후 8:36, 테스트 : ㅎㅇ
+2021년 12월 29일 오후 8:37, 나 : ㅎㅇ
+2021년 12월 29일 오후 8:41, 테스트 : ㅎㅇㅎㅇ
+2021년 12월 29일 오후 8:41, 테스트 : ㅎㅇㅎㅇ
+
+2021년 12월 30일 오후 10:06
+2021년 12월 30일 오후 10:06, 나 : Welcome to RegExr 0.3b, an intuitive tool for learning, writing, and testing Regular Expressions. Key features include: 
+www.google.com
+* real time results: shows results as you type 
+* code hinting: roll over your expression to see info on specific elements 
+* detailed results: roll over a match to see details & view group info below 
+* built in regex guide: double click entries to insert them into your expression 
+* online & desktop: regexr.com or download the desktop version for Mac, Windows, or Linux 
+* save your expressions: My Saved expressions are saved locally 
+* search Comm https://google.us.edi?34535/534534?dfg=g&fg unity expressions and add your own 
+* create Share Links to send your expressions to co-workers or link to them on Twitter or your blog [ex. http://RegExr.com?2rjl6] 
+
+Built by gskinner.com with Flex 3 [adobe.com/go/flex] and Spelling Plus Library for text highlighting [gskinner.com/products/spl].
