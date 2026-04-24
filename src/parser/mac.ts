@@ -1,5 +1,21 @@
 import type { Chat, Message } from "../types";
 
+const SYSTEM_MESSAGE_PATTERNS = [
+  {
+    pattern: /^(.*) invited (.*?)( and)?\.$/,
+    toText: (match: RegExpMatchArray) =>
+      `${match[1]}님이 ${match[2]}님을 초대하였습니다.`,
+  },
+  {
+    pattern: /^.+님이 나갔습니다\.$/,
+    toText: (match: RegExpMatchArray) => match[0],
+  },
+  {
+    pattern: /^.+ left this chatroom\.$/,
+    toText: (match: RegExpMatchArray) => match[0],
+  },
+];
+
 export function parseMac(text: string): Chat | null {
   const headerEnd = text.indexOf("\n");
   if (headerEnd < 0) return null;
@@ -21,18 +37,9 @@ export function parseMac(text: string): Chat | null {
       messages.push({ kind: "notification", date, text: date });
     }
 
-    const inviteMatch = message.match(/^(.*) invited (.*?)( and)?\.$/);
-    if (inviteMatch) {
-      messages.push({
-        kind: "notification",
-        date,
-        text: `${inviteMatch[1]}님이 ${inviteMatch[2]}님을 초대하였습니다.`,
-      });
-      continue;
-    }
-
-    if (message.endsWith("님이 나갔습니다.")) {
-      messages.push({ kind: "notification", date, text: message });
+    const systemMessage = getSystemMessageText(message);
+    if (systemMessage) {
+      messages.push({ kind: "notification", date, text: systemMessage });
       continue;
     }
 
@@ -50,6 +57,15 @@ export function parseMac(text: string): Chat | null {
   const roomName = users.length <= 3 ? users.join(", ") : "단체방";
 
   return { roomName, users, messages };
+}
+
+function getSystemMessageText(message: string): string | null {
+  for (const { pattern, toText } of SYSTEM_MESSAGE_PATTERNS) {
+    const match = message.match(pattern);
+    if (match) return toText(match);
+  }
+
+  return null;
 }
 
 // 3-field rows: unquoted date, "quoted user", "quoted message".
