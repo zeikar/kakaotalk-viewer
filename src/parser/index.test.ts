@@ -85,6 +85,48 @@ Built by gskinner.com with Flex 3 [adobe.com/go/flex] and Spelling Plus Library 
     );
   });
 
+  test("does not repeat Android date headers for the same date", () => {
+    const chat = parseKakaoTalkText(`데모 채팅방 카카오톡 대화
+저장한 날짜 : 2026년 4월 24일 오후 9:30
+
+
+2026년 4월 24일 오후 8:56
+2026년 4월 24일 오후 8:56, 지민 : 스크린샷용 데모 한번 뽑아보자
+
+2026년 4월 24일 오후 9:12
+2026년 4월 24일 오후 9:12, 나 : 날짜 헤더는 한 번만 보여야 함`);
+
+    if (!chat) throw new Error("Expected Android sample to parse");
+
+    expect(
+      chat.messages.filter(
+        (message) =>
+          message.kind === "notification" && message.text === "2026년 4월 24일"
+      )
+    ).toHaveLength(1);
+    expect(chat.messages).toEqual([
+      {
+        kind: "notification",
+        date: "2026년 4월 24일",
+        text: "2026년 4월 24일",
+      },
+      {
+        kind: "plain",
+        username: "지민",
+        date: "2026년 4월 24일",
+        time: "20:56",
+        text: "스크린샷용 데모 한번 뽑아보자",
+      },
+      {
+        kind: "plain",
+        username: "나",
+        date: "2026년 4월 24일",
+        time: "21:12",
+        text: "날짜 헤더는 한 번만 보여야 함",
+      },
+    ]);
+  });
+
   test("parses Windows exports with notifications", () => {
     const chat = parseKakaoTalkText(`테스트 님과 카카오톡 대화
 저장한 날짜 : 2021년 12월 18일 오후 7:17

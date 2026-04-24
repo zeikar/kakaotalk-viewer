@@ -31,8 +31,11 @@ export function parseAndroid(text: string): Chat | null {
         if (last && last.kind === "plain") last.text += "\n" + line;
         continue;
       }
-      currentDate = dateMatch[1];
-      messages.push({ kind: "notification", date: currentDate, text: currentDate });
+      const date = dateMatch[1];
+      if (currentDate !== date) {
+        currentDate = date;
+        messages.push({ kind: "notification", date, text: date });
+      }
       continue;
     }
 
