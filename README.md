@@ -8,7 +8,7 @@ Inspired by [kokoa-clone-2020](https://github.com/nomadcoders/kokoa-clone-2020)
 
 [https://zeikar.github.io/kakaotalk-viewer](https://zeikar.github.io/kakaotalk-viewer)
 
-<img src="./docs/assets/kakaotalk-viewer-demo.png" alt="KakaoTalk Viewer demo screenshot" width="360">
+<img src="./docs/assets/kakaotalk-viewer-demo.png" alt="KakaoTalk Viewer demo screenshot" width="720">
 
 # Supports
 
