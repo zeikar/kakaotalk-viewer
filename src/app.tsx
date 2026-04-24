@@ -1,10 +1,13 @@
-import { useCallback, useState } from "preact/hooks";
+import { useCallback, useEffect, useMemo, useRef, useState } from "preact/hooks";
+import type { VirtuosoHandle } from "react-virtuoso";
 import { Header } from "./components/header";
 import { MessageList } from "./components/message-list";
 import { Reply } from "./components/reply";
+import { SearchBar } from "./components/search-bar";
 import { SideMenu } from "./components/side-menu";
 import { readFile } from "./lib/read-file";
 import { getCurrentDate, getCurrentTime } from "./lib/format";
+import { findMatches } from "./lib/search";
 import { parseKakaoTalkText } from "./parser";
 import { createTutorialChat } from "./tutorial";
 import type { Chat } from "./types";
@@ -19,6 +22,57 @@ export function App() {
   // Bumped on each chat replacement to remount the Virtuoso list and start
   // scroll position at the latest message.
   const [chatKey, setChatKey] = useState(0);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [currentMatchIdx, setCurrentMatchIdx] = useState(0);
+  const virtuosoRef = useRef<VirtuosoHandle>(null);
+
+  const matches = useMemo(
+    () => findMatches(chat.messages, searchQuery),
+    [chat.messages, searchQuery]
+  );
+
+  const closeSearch = useCallback(() => {
+    setSearchOpen(false);
+    setSearchQuery("");
+    setCurrentMatchIdx(0);
+  }, []);
+
+  useEffect(() => {
+    setCurrentMatchIdx(0);
+  }, [searchQuery]);
+
+  useEffect(() => {
+    if (matches.length === 0) return;
+    virtuosoRef.current?.scrollToIndex({
+      index: matches[currentMatchIdx],
+      align: "center",
+    });
+  }, [matches, currentMatchIdx]);
+
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === "f") {
+        e.preventDefault();
+        setSearchOpen(true);
+      } else if (e.key === "Escape" && searchOpen) {
+        e.preventDefault();
+        closeSearch();
+      }
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [searchOpen, closeSearch]);
+
+  const handleNext = useCallback(() => {
+    setCurrentMatchIdx((i) => (matches.length === 0 ? 0 : (i + 1) % matches.length));
+  }, [matches.length]);
+
+  const handlePrev = useCallback(() => {
+    setCurrentMatchIdx((i) =>
+      matches.length === 0 ? 0 : (i - 1 + matches.length) % matches.length
+    );
+  }, [matches.length]);
 
   const appendSystemMessage = useCallback((text: string) => {
     setChat((prev) => ({
@@ -100,12 +154,29 @@ export function App() {
         <Header
           title={`${chat.roomName} (${chat.users.length})`}
           onOpenMenu={() => setMenuOpen(true)}
+          onToggleSearch={() => setSearchOpen((v) => !v)}
         />
+        {searchOpen && (
+          <SearchBar
+            query={searchQuery}
+            onQueryChange={setSearchQuery}
+            matchCount={matches.length}
+            currentIndex={currentMatchIdx}
+            onNext={handleNext}
+            onPrev={handlePrev}
+            onClose={closeSearch}
+          />
+        )}
         <MessageList
           key={chatKey}
           messages={chat.messages}
           owner={owner}
           onSelectOwner={handleSelectOwner}
+          virtuosoRef={virtuosoRef}
+          searchQuery={searchOpen ? searchQuery : ""}
+          currentMatchMessageIndex={
+            searchOpen && matches.length > 0 ? matches[currentMatchIdx] : null
+          }
         />
         <Reply onFile={handleFile} />
         <SideMenu open={menuOpen} onClose={() => setMenuOpen(false)} />

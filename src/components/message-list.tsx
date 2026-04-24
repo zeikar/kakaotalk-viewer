@@ -1,4 +1,5 @@
-import { Virtuoso } from "react-virtuoso";
+import type { Ref } from "preact";
+import { Virtuoso, type VirtuosoHandle } from "react-virtuoso";
 import type { Message } from "../types";
 import { MessageRow } from "./message-row";
 
@@ -6,11 +7,22 @@ interface Props {
   messages: Message[];
   owner: string | null;
   onSelectOwner: (username: string) => void;
+  virtuosoRef?: Ref<VirtuosoHandle>;
+  searchQuery: string;
+  currentMatchMessageIndex: number | null;
 }
 
-export function MessageList({ messages, owner, onSelectOwner }: Props) {
+export function MessageList({
+  messages,
+  owner,
+  onSelectOwner,
+  virtuosoRef,
+  searchQuery,
+  currentMatchMessageIndex,
+}: Props) {
   return (
     <Virtuoso
+      ref={virtuosoRef}
       className="flex-1 min-h-0"
       data={messages}
       initialTopMostItemIndex={Math.max(0, messages.length - 1)}
@@ -28,6 +40,8 @@ export function MessageList({ messages, owner, onSelectOwner }: Props) {
           isFirst={isFirstOfGroup(messages, index)}
           isLast={isLastOfGroup(messages, index)}
           onSelectOwner={onSelectOwner}
+          searchQuery={searchQuery}
+          isCurrentMatch={index === currentMatchMessageIndex}
         />
       )}
     />

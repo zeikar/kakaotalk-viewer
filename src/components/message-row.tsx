@@ -10,6 +10,8 @@ interface Props {
   isFirst: boolean;
   isLast: boolean;
   onSelectOwner: (username: string) => void;
+  searchQuery: string;
+  isCurrentMatch: boolean;
 }
 
 export function MessageRow({
@@ -18,9 +20,17 @@ export function MessageRow({
   isFirst,
   isLast,
   onSelectOwner,
+  searchQuery,
+  isCurrentMatch,
 }: Props) {
   if (message.kind === "notification") {
-    return <NotificationRow text={message.text} />;
+    return (
+      <NotificationRow
+        text={message.text}
+        searchQuery={searchQuery}
+        isCurrentMatch={isCurrentMatch}
+      />
+    );
   }
 
   const username = message.username;
@@ -32,6 +42,7 @@ export function MessageRow({
   // line up vertically; only the first bubble in a group actually draws the tail.
   const bubbleGutter = isMine ? "mr-2.5" : "ml-2.5";
   const tail = isFirst ? (isMine ? "bubble-tail-right" : "bubble-tail-left") : "";
+  const currentRing = isCurrentMatch ? "ring-2 ring-blue-500" : "";
 
   return (
     <div class={`flex w-full px-2 pb-1.5 ${rowDir}`}>
@@ -49,10 +60,10 @@ export function MessageRow({
 
         <div class="relative flex items-end min-w-0">
           <div
-            class={`${bubbleColor} ${tail} ${bubbleGutter} rounded-2xl px-3.5 py-2.5 text-base shadow-sm`}
+            class={`${bubbleColor} ${tail} ${bubbleGutter} ${currentRing} rounded-2xl px-3.5 py-2.5 text-base shadow-sm`}
           >
             {message.kind === "plain" ? (
-              <PlainMessageBody text={message.text} />
+              <PlainMessageBody text={message.text} searchQuery={searchQuery} />
             ) : (
               <SelectMessageBody
                 options={message.options}
