@@ -11,10 +11,12 @@ export default defineConfig({
     },
   },
   test: {
+    environment: "happy-dom",
+    setupFiles: ["./src/test-setup.ts"],
     coverage: {
       provider: "v8",
       include: ["src/lib/**/*.ts", "src/parser/**/*.ts"],
-      exclude: ["src/**/*.test.ts"],
+      exclude: ["src/**/*.test.{ts,tsx}"],
       reporter: ["text"],
       thresholds: {
         branches: 100,
