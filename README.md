@@ -23,11 +23,10 @@ Preact + TypeScript + Vite + Tailwind, virtualized list via [react-virtuoso](htt
 ```sh
 npm install
 npm run dev      # http://localhost:5173/kakaotalk-viewer/
+npm test
 npm run build    # type-check + production build to ./dist
 npm run preview  # serve ./dist locally
 ```
-
-`public/test.txt` 는 안드로이드 export 샘플로, 개발 중에 업로드해서 동작 확인용.
 
 # Deployment
 
