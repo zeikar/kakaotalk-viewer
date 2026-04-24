@@ -43,9 +43,10 @@ export function MessageRow({
   const bubbleGutter = isMine ? "mr-2.5" : "ml-2.5";
   const tail = isFirst ? (isMine ? "bubble-tail-right" : "bubble-tail-left") : "";
   const currentRing = isCurrentMatch ? "ring-2 ring-blue-500" : "";
+  const rowPadBottom = isLast ? "pb-2.5" : "pb-1.5";
 
   return (
-    <div class={`flex w-full px-2 pb-1.5 ${rowDir}`}>
+    <div class={`flex w-full px-2 ${rowPadBottom} ${rowDir}`}>
       {!isMine &&
         (isFirst ? (
           <ProfileAvatar username={displayName} />
