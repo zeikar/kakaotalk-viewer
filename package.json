@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@heroicons/react": "^2.2.0",
     "preact": "^10.22.0",
     "react-virtuoso": "^4.7.10"
   },

@@ -1,3 +1,5 @@
+import { ArrowTopRightOnSquareIcon, XMarkIcon } from "@heroicons/react/24/outline";
+
 interface Props {
   open: boolean;
   onClose: () => void;
@@ -28,7 +30,7 @@ export function SideMenu({ open, onClose }: Props) {
             onClick={onClose}
             class="cursor-pointer p-1"
           >
-            <i class="fas fa-times fa-lg" />
+            <XMarkIcon className="h-6 w-6" aria-hidden="true" />
           </button>
         </div>
 
@@ -38,8 +40,10 @@ export function SideMenu({ open, onClose }: Props) {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="GitHub"
+            class="inline-flex items-center gap-1.5 text-sm font-medium text-slate-700"
           >
-            <i class="fab fa-github fa-2x" />
+            <span>GitHub</span>
+            <ArrowTopRightOnSquareIcon className="h-4 w-4" aria-hidden="true" />
           </a>
         </div>
       </aside>

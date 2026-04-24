@@ -1,3 +1,9 @@
+import {
+  ArrowLeftIcon,
+  Bars3Icon,
+  MagnifyingGlassIcon,
+} from "@heroicons/react/24/outline";
+
 interface Props {
   title: string;
   onOpenMenu: () => void;
@@ -6,19 +12,19 @@ interface Props {
 export function Header({ title, onOpenMenu }: Props) {
   return (
     <header class="bg-kakao-bg flex items-center justify-between px-3 h-[50px] flex-shrink-0">
-      <div class="w-12">
-        <i class="fas fa-angle-left fa-2x" />
+      <div class="w-12 flex items-center">
+        <ArrowLeftIcon className="h-6 w-6" aria-hidden="true" />
       </div>
       <h1 class="text-lg font-semibold truncate text-center flex-1">{title}</h1>
       <div class="w-12 flex justify-end items-center gap-4">
-        <i class="fas fa-search fa-lg" />
+        <MagnifyingGlassIcon className="h-6 w-6" aria-hidden="true" />
         <button
           type="button"
           aria-label="메뉴 열기"
           onClick={onOpenMenu}
           class="cursor-pointer"
         >
-          <i class="fas fa-bars fa-lg" />
+          <Bars3Icon className="h-6 w-6" aria-hidden="true" />
         </button>
       </div>
     </header>

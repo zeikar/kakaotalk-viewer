@@ -1,3 +1,5 @@
+import { PlusCircleIcon } from "@heroicons/react/24/outline";
+
 interface Props {
   onFile: (file: File) => void;
 }
@@ -5,7 +7,7 @@ interface Props {
 export function Reply({ onFile }: Props) {
   return (
     <div class="bg-white border-t flex items-center gap-3 px-4 py-2 h-[70px] flex-shrink-0">
-      <i class="far fa-plus-square fa-lg opacity-50" />
+      <PlusCircleIcon className="h-7 w-7 opacity-50 flex-shrink-0" aria-hidden="true" />
       <label class="flex-1 relative">
         <input
           type="file"
