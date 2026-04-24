@@ -8,7 +8,7 @@ export function PlainMessageBody({ text }: Props) {
   const segments = splitByUrls(text);
 
   return (
-    <span class="whitespace-pre-wrap break-words">
+    <span class="whitespace-pre-wrap break-all">
       {segments.map((seg, i) =>
         seg.kind === "url" ? (
           <a

@@ -7,7 +7,7 @@ export function SideMenu({ open, onClose }: Props) {
   return (
     <>
       <div
-        class={`fixed inset-0 z-20 transition duration-500 ${
+        class={`absolute inset-0 z-20 transition duration-500 ${
           open
             ? "visible bg-black/50"
             : "invisible bg-transparent pointer-events-none"
@@ -16,7 +16,7 @@ export function SideMenu({ open, onClose }: Props) {
         aria-hidden="true"
       />
       <aside
-        class={`fixed top-0 right-0 z-30 h-full w-[70%] min-w-[200px] bg-white flex flex-col transition-transform duration-500 ${
+        class={`absolute top-0 right-0 z-30 h-full w-[70%] min-w-[200px] bg-white flex flex-col transition-transform duration-500 ${
           open ? "translate-x-0" : "translate-x-full"
         }`}
       >

@@ -95,19 +95,21 @@ export function App() {
   );
 
   return (
-    <div class="flex flex-col h-screen bg-kakao-bg">
-      <Header
-        title={`${chat.roomName} (${chat.users.length})`}
-        onOpenMenu={() => setMenuOpen(true)}
-      />
-      <MessageList
-        key={chatKey}
-        messages={chat.messages}
-        owner={owner}
-        onSelectOwner={handleSelectOwner}
-      />
-      <Reply onFile={handleFile} />
-      <SideMenu open={menuOpen} onClose={() => setMenuOpen(false)} />
+    <div class="h-screen flex justify-center bg-slate-700">
+      <div class="relative flex flex-col w-full max-w-[480px] h-screen bg-kakao-bg shadow-xl overflow-hidden">
+        <Header
+          title={`${chat.roomName} (${chat.users.length})`}
+          onOpenMenu={() => setMenuOpen(true)}
+        />
+        <MessageList
+          key={chatKey}
+          messages={chat.messages}
+          owner={owner}
+          onSelectOwner={handleSelectOwner}
+        />
+        <Reply onFile={handleFile} />
+        <SideMenu open={menuOpen} onClose={() => setMenuOpen(false)} />
+      </div>
     </div>
   );
 }

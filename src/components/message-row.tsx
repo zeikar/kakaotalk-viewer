@@ -26,7 +26,11 @@ export function MessageRow({
   const username = message.username;
   const bubbleColor = isMine ? "bg-kakao-yellow" : "bg-white";
   const rowDir = isMine ? "flex-row-reverse" : "";
-  const infoDir = isMine ? "flex-row-reverse" : "";
+  const timePosition = isMine ? "right-full mr-1" : "left-full ml-1";
+  // Reserve tail-side gutter on every bubble so first/continuation bubbles
+  // line up vertically; only the first bubble in a group actually draws the tail.
+  const bubbleGutter = isMine ? "mr-2.5" : "ml-2.5";
+  const tail = isFirst ? (isMine ? "bubble-tail-right" : "bubble-tail-left") : "";
 
   return (
     <div class={`flex w-full mb-1.5 px-2 ${rowDir}`}>
@@ -37,14 +41,14 @@ export function MessageRow({
           <ProfileAvatarPlaceholder />
         ))}
 
-      <div class="flex flex-col max-w-[80%]">
+      <div class="flex flex-col max-w-[calc(80%-3rem)] min-w-0">
         {!isMine && isFirst && (
           <div class="text-sm opacity-80 ml-2 mb-1">{username}</div>
         )}
 
-        <div class={`flex items-end gap-1 ${infoDir}`}>
+        <div class="relative flex items-end min-w-0">
           <div
-            class={`${bubbleColor} rounded-md px-2.5 py-2 text-base shadow-sm`}
+            class={`${bubbleColor} ${tail} ${bubbleGutter} rounded-2xl px-3.5 py-2.5 text-base shadow-sm`}
           >
             {message.kind === "plain" ? (
               <PlainMessageBody text={message.text} />
@@ -56,7 +60,9 @@ export function MessageRow({
             )}
           </div>
           {isLast && (
-            <div class="text-xs opacity-70 whitespace-nowrap">
+            <div
+              class={`absolute bottom-0 ${timePosition} text-xs opacity-70 whitespace-nowrap`}
+            >
               {message.time}
             </div>
           )}

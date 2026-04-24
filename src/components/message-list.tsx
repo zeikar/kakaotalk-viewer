@@ -14,7 +14,6 @@ export function MessageList({ messages, owner, onSelectOwner }: Props) {
       className="flex-1 min-h-0"
       data={messages}
       initialTopMostItemIndex={Math.max(0, messages.length - 1)}
-      alignToBottom
       followOutput="auto"
       increaseViewportBy={400}
       computeItemKey={(index, msg) => `${index}-${msg.kind}`}
