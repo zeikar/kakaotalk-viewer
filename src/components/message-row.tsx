@@ -68,7 +68,7 @@ export function MessageRow({
           <div class="text-sm opacity-80 ml-2 mb-1">{displayName}</div>
         )}
 
-        <div class="relative flex items-end min-w-0">
+        <div class="relative flex items-end min-w-0 w-fit">
           <div
             class={`${bubbleColor} ${tail} ${bubbleGutter} ${currentRing} rounded-2xl px-3.5 py-2.5 text-base shadow-sm`}
           >
