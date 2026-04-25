@@ -30,6 +30,11 @@ export function parseMac(text: string): Chat | null {
   let currentDate = "";
 
   for (const [rawDate, user, message] of rows) {
+    if (rawDate.length === 0) {
+      messages.push({ kind: "notification", date: currentDate, text: message });
+      continue;
+    }
+
     const date = formatDate(rawDate);
     const time = formatTime(rawDate);
 

@@ -89,6 +89,36 @@ describe("parseMac", () => {
     });
   });
 
+  test("treats rows with empty date as notifications using the prior currentDate", () => {
+    const chat = parseMac(`Date,User,Message
+2021-12-29 20:36:00,"테스트","ㅎㅇ"
+,"","The message has been deleted."
+2021-12-29 20:37:00,"나","반가워"`);
+
+    expect(chat?.messages).toEqual([
+      { kind: "date-header", date: "2021-12-29" },
+      {
+        kind: "plain",
+        username: "테스트",
+        date: "2021-12-29",
+        time: "20:36",
+        text: "ㅎㅇ",
+      },
+      {
+        kind: "notification",
+        date: "2021-12-29",
+        text: "The message has been deleted.",
+      },
+      {
+        kind: "plain",
+        username: "나",
+        date: "2021-12-29",
+        time: "20:37",
+        text: "반가워",
+      },
+    ]);
+  });
+
   test("uses 단체방 for rooms with more than three users", () => {
     const chat = parseMac(`Date,User,Message
 2021-12-29 20:36:00,"a","1"
