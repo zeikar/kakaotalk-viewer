@@ -69,6 +69,35 @@ describe("parseWindows", () => {
     });
   });
 
+  test("parses English-locale date separators", () => {
+    const chat = parseWindows(`테스트 님과 카카오톡 대화
+저장한 날짜 : 2023년 7월 22일 오후 11:34
+
+--------------- Saturday, July 22, 2023 ---------------
+[테스트] [23:34] 첫째 날
+--------------- Sunday, July 23, 2023 ---------------
+[지민] [00:00] 둘째 날`);
+
+    expect(chat?.messages).toEqual([
+      { kind: "date-header", date: "2023-07-22" },
+      {
+        kind: "plain",
+        username: "테스트",
+        date: "2023-07-22",
+        time: "23:34",
+        text: "첫째 날",
+      },
+      { kind: "date-header", date: "2023-07-23" },
+      {
+        kind: "plain",
+        username: "지민",
+        date: "2023-07-23",
+        time: "00:00",
+        text: "둘째 날",
+      },
+    ]);
+  });
+
   test("ignores unmatched leading lines before the first message", () => {
     const chat = parseWindows(`테스트 님과 카카오톡 대화
 저장한 날짜 : 2021년 12월 18일 오후 7:17

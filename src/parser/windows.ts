@@ -1,8 +1,47 @@
 import type { Chat, Message, PlainMessage } from "../types";
 import { formatIsoDate } from "../lib/format";
 
-const DATE_LINE = /^-{15} (\d{4})년 (\d{1,2})월 (\d{1,2})일 .*-{15}$/;
+const DATE_LINE_KO = /^-{15} (\d{4})년 (\d{1,2})월 (\d{1,2})일 .*-{15}$/;
+
+const MONTHS_EN = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
+const DATE_LINE_EN = new RegExp(
+  `^-{15} \\w+, (${MONTHS_EN.join("|")}) (\\d{1,2}), (\\d{4}) -{15}$`
+);
+
 const MESSAGE_LINE = /^\[(.*)\] \[(\d{1,2}:\d{1,2})\] (.*)$/;
+
+function matchDateLine(line: string): string | null {
+  const ko = line.match(DATE_LINE_KO);
+  if (ko) {
+    return formatIsoDate(
+      parseInt(ko[1], 10),
+      parseInt(ko[2], 10),
+      parseInt(ko[3], 10)
+    );
+  }
+  const en = line.match(DATE_LINE_EN);
+  if (en) {
+    return formatIsoDate(
+      parseInt(en[3], 10),
+      MONTHS_EN.indexOf(en[1]) + 1,
+      parseInt(en[2], 10)
+    );
+  }
+  return null;
+}
 
 export function parseWindows(text: string): Chat | null {
   const lines = text.split(/\r?\n/);
@@ -17,13 +56,9 @@ export function parseWindows(text: string): Chat | null {
   for (let i = 3; i < lines.length; i++) {
     const line = lines[i];
 
-    const dateMatch = line.match(DATE_LINE);
-    if (dateMatch) {
-      currentDate = formatIsoDate(
-        parseInt(dateMatch[1], 10),
-        parseInt(dateMatch[2], 10),
-        parseInt(dateMatch[3], 10)
-      );
+    const date = matchDateLine(line);
+    if (date) {
+      currentDate = date;
       messages.push({ kind: "date-header", date: currentDate });
       continue;
     }
