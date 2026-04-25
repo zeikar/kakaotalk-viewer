@@ -2,7 +2,7 @@
 
 KakaoTalk chat viewer. 카카오톡 내보내기 뷰어.
 
-카카오톡 대화 내보내기 파일을 브라우저에서 바로 열어볼 수 있는 오픈소스 카카오톡 채팅 뷰어입니다. Windows, macOS, Android에서 내보낸 카카오톡 대화 파일을 읽고, 실제 메신저처럼 날짜별로 정리된 메시지를 검색하고 탐색할 수 있습니다.
+카카오톡 대화 내보내기 파일을 브라우저에서 바로 열어볼 수 있는 오픈소스 카카오톡 채팅 뷰어입니다. Windows, macOS, Android, iOS에서 내보낸 카카오톡 대화 파일을 읽고, 실제 메신저처럼 날짜별로 정리된 메시지를 검색하고 탐색할 수 있습니다.
 
 [English](README.en.md)
 
@@ -14,7 +14,7 @@ KakaoTalk chat viewer. 카카오톡 내보내기 뷰어.
 
 ## 주요 기능
 
-- Windows, macOS, Android 카카오톡 내보내기 파일 자동 감지
+- Windows, macOS, Android, iOS 카카오톡 내보내기 파일 자동 감지
 - `.txt`, `.csv` 대화 파일 브라우저 렌더링
 - 한국어 내보내기와 영어 날짜/시스템 메시지 형식 지원
 - 메시지 검색, 날짜 이동, 맨 처음/맨 끝 이동
@@ -42,6 +42,7 @@ KakaoTalk chat viewer. 카카오톡 내보내기 뷰어.
 | Windows용 카카오톡 | v3.3.6.2992 이상 |
 | macOS용 카카오톡 | v2.9.9 이상 |
 | Android용 카카오톡 | v9.6.1 이상 |
+| iOS용 카카오톡 | 확인 중 |
 
 내보내기 형식은 카카오톡 앱 버전과 OS 언어 설정에 따라 달라질 수 있습니다. 읽히지 않는 파일이 있다면 샘플에서 개인정보를 제거한 뒤 [Issue](https://github.com/zeikar/kakaotalk-viewer/issues)에 알려주세요.
 
