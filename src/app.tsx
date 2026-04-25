@@ -7,19 +7,15 @@ import { Reply } from "./components/reply";
 import { SearchBar } from "./components/search-bar";
 import { SideMenu } from "./components/side-menu";
 import { buildDateIndex } from "./lib/date-index";
+import { pickVisibleDateIndex } from "./lib/visible-date";
 import { readFile } from "./lib/read-file";
 import { formatDateKorean, getCurrentDate, getCurrentTime } from "./lib/format";
 import { findMatches } from "./lib/search";
 import { parseKakaoTalkText } from "./parser";
 import { createTutorialChat } from "./tutorial";
-import type { Chat, Message } from "./types";
+import type { Chat } from "./types";
 
 const SYSTEM_USER = "카카오톡 뷰어";
-
-function pickVisibleDateIndex(messages: Message[], range: ListRange): number {
-  const centerIndex = Math.floor((range.startIndex + range.endIndex) / 2);
-  return Math.max(0, Math.min(messages.length - 1, centerIndex));
-}
 
 export function App() {
   const [chat, setChat] = useState<Chat>(() => createTutorialChat());
