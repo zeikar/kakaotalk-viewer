@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "preact/hooks";
-import type { VirtuosoHandle } from "react-virtuoso";
+import type { ListRange, VirtuosoHandle } from "react-virtuoso";
 import { DatePicker } from "./components/date-picker";
 import { Header } from "./components/header";
 import { MessageList } from "./components/message-list";
@@ -12,9 +12,14 @@ import { formatDateKorean, getCurrentDate, getCurrentTime } from "./lib/format";
 import { findMatches } from "./lib/search";
 import { parseKakaoTalkText } from "./parser";
 import { createTutorialChat } from "./tutorial";
-import type { Chat } from "./types";
+import type { Chat, Message } from "./types";
 
 const SYSTEM_USER = "카카오톡 뷰어";
+
+function pickVisibleDateIndex(messages: Message[], range: ListRange): number {
+  const centerIndex = Math.floor((range.startIndex + range.endIndex) / 2);
+  return Math.max(0, Math.min(messages.length - 1, centerIndex));
+}
 
 export function App() {
   const [chat, setChat] = useState<Chat>(() => createTutorialChat());
@@ -79,9 +84,11 @@ export function App() {
     [closeDatePicker]
   );
 
-  const handleVisibleStartChange = useCallback(
-    (index: number) => {
+  const handleVisibleRangeChange = useCallback(
+    (range: ListRange) => {
+      const index = pickVisibleDateIndex(chat.messages, range);
       visibleStartRef.current = index;
+
       const msg = chat.messages[index];
       if (msg) setScrollingDate(msg.date);
     },
@@ -269,7 +276,7 @@ export function App() {
               searchOpen && matches.length > 0 ? matches[currentMatchIdx] : null
             }
             onDateHeaderClick={openDatePickerAt}
-            onVisibleStartChange={handleVisibleStartChange}
+            onVisibleRangeChange={handleVisibleRangeChange}
             onScrollingChange={handleScrollingChange}
             onScroll={handleScroll}
           />

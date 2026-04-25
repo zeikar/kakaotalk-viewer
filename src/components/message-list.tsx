@@ -1,5 +1,5 @@
 import type { Ref } from "preact";
-import { Virtuoso, type VirtuosoHandle } from "react-virtuoso";
+import { Virtuoso, type ListRange, type VirtuosoHandle } from "react-virtuoso";
 import type { Message } from "../types";
 import { MessageRow } from "./message-row";
 
@@ -11,7 +11,7 @@ interface Props {
   searchQuery: string;
   currentMatchMessageIndex: number | null;
   onDateHeaderClick?: (date: string) => void;
-  onVisibleStartChange?: (index: number) => void;
+  onVisibleRangeChange?: (range: ListRange) => void;
   onScrollingChange?: (scrolling: boolean) => void;
   onScroll?: (event: Event) => void;
 }
@@ -24,7 +24,7 @@ export function MessageList({
   searchQuery,
   currentMatchMessageIndex,
   onDateHeaderClick,
-  onVisibleStartChange,
+  onVisibleRangeChange,
   onScrollingChange,
   onScroll,
 }: Props) {
@@ -36,7 +36,7 @@ export function MessageList({
       initialTopMostItemIndex={Math.max(0, messages.length - 1)}
       followOutput="auto"
       increaseViewportBy={400}
-      rangeChanged={(range) => onVisibleStartChange?.(range.startIndex)}
+      rangeChanged={(range) => onVisibleRangeChange?.(range)}
       isScrolling={(scrolling) => onScrollingChange?.(scrolling)}
       onScroll={onScroll}
       components={{
