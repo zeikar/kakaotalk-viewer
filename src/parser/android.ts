@@ -3,7 +3,7 @@ import { convert12TimeTo24Time, formatIsoDate } from "../lib/format";
 
 const DATE_LINE = /^(\d{4})년 (\d{1,2})월 (\d{1,2})일 .*$/;
 const MESSAGE_LINE =
-  /^\d{4}년 \d{1,2}월 \d{1,2}일 (오전|오후) (\d{1,2}:\d{1,2}), (.*) : (.*)$/;
+  /^\d{4}년 \d{1,2}월 \d{1,2}일 (오전|오후) (\d{1,2}:\d{1,2}), (.*?) : (.*)$/;
 const NOTIFICATION_LINE =
   /^\d{4}년 \d{1,2}월 \d{1,2}일 (오전|오후) \d{1,2}:\d{1,2}, (.*)$/;
 

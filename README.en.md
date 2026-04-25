@@ -42,7 +42,7 @@ KakaoTalk export files from the following versions or newer are supported.
 | KakaoTalk for Windows | v3.3.6.2992+ |
 | KakaoTalk for macOS | v2.9.9+ |
 | KakaoTalk for Android | v9.6.1+ |
-| KakaoTalk for iOS | To be confirmed |
+| KakaoTalk for iOS | v26.3.3+ |
 
 KakaoTalk export formats may differ by app version and OS language. If your file cannot be opened, please remove private information from a small sample and share it in an [Issue](https://github.com/zeikar/kakaotalk-viewer/issues).
 

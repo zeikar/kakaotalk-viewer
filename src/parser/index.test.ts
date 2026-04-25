@@ -37,4 +37,19 @@ describe("parseKakaoTalkText", () => {
       time: "20:36",
     });
   });
+
+  test("dispatches iOS exports", () => {
+    const chat = parseKakaoTalkText(`테스트 님과 카카오톡 대화
+저장한 날짜 : 2021년 12월 18일 오후 7:17
+
+
+2021년 12월 29일 수요일
+오후 8:36, 테스트 : ㅎㅇ`);
+
+    expect(chat?.messages[1]).toMatchObject({
+      kind: "plain",
+      username: "테스트",
+      time: "20:36",
+    });
+  });
 });

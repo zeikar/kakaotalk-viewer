@@ -1,5 +1,6 @@
 import type { Chat } from "../types";
 import { parseAndroid } from "./android";
+import { isIosExport, parseIos } from "./ios";
 import { parseMac } from "./mac";
 import { parseWindows } from "./windows";
 
@@ -12,6 +13,10 @@ export function parseKakaoTalkText(text: string): Chat | null {
 
   if (lines[3]?.startsWith("---------------")) {
     return parseWindows(text);
+  }
+
+  if (isIosExport(text)) {
+    return parseIos(text);
   }
 
   return parseAndroid(text);

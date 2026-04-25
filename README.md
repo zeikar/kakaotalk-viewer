@@ -42,7 +42,7 @@ KakaoTalk chat viewer. 카카오톡 내보내기 뷰어.
 | Windows용 카카오톡 | v3.3.6.2992 이상 |
 | macOS용 카카오톡 | v2.9.9 이상 |
 | Android용 카카오톡 | v9.6.1 이상 |
-| iOS용 카카오톡 | 확인 중 |
+| iOS용 카카오톡 | v26.3.3 이상 |
 
 내보내기 형식은 카카오톡 앱 버전과 OS 언어 설정에 따라 달라질 수 있습니다. 읽히지 않는 파일이 있다면 샘플에서 개인정보를 제거한 뒤 [Issue](https://github.com/zeikar/kakaotalk-viewer/issues)에 알려주세요.
 

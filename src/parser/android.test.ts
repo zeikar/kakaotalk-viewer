@@ -116,6 +116,25 @@ broken, comma line
     ).toHaveLength(1);
   });
 
+  test("keeps colons in message text out of usernames", () => {
+    const chat = parseAndroid(`데모 채팅방 카카오톡 대화
+저장한 날짜 : 2026년 4월 24일 오후 9:30
+
+
+2026년 4월 24일 오후 9:00
+2026년 4월 24일 오후 9:00, 테스트 : Day 1 : https://example.com/one
+Day 2 : https://example.com/two`);
+
+    expect(chat?.users).toEqual(["테스트"]);
+    expect(chat?.messages[1]).toEqual({
+      kind: "plain",
+      username: "테스트",
+      date: "2026-04-24",
+      time: "21:00",
+      text: "Day 1 : https://example.com/one\nDay 2 : https://example.com/two",
+    });
+  });
+
   test("keeps the former public sample behavior", () => {
     const chat = parseAndroid(`테스트 님과 카카오톡 대화
 저장한 날짜 : 2021년 12월 18일 오후 7:17
