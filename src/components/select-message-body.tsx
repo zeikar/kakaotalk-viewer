@@ -8,7 +8,7 @@ export function SelectMessageBody({ options, onSelect }: Props) {
 
   return (
     <select
-      class="rounded border px-2 py-1 text-base"
+      class="rounded border px-2 py-1 text-base w-full max-w-full"
       defaultValue=""
       onChange={(e) => onSelect((e.target as HTMLSelectElement).value)}
     >
