@@ -69,6 +69,15 @@ describe("findMatches", () => {
   test("does not match username", () => {
     expect(findMatches([plain("hello", "카카오")], "카카오")).toEqual([]);
   });
+
+  test("never matches a date-header message", () => {
+    const msgs: Message[] = [
+      { kind: "date-header", date: "2024-01-01" },
+      plain("hello"),
+    ];
+    expect(findMatches(msgs, "2024")).toEqual([]);
+    expect(findMatches(msgs, "01-01")).toEqual([]);
+  });
 });
 
 describe("splitByQuery", () => {

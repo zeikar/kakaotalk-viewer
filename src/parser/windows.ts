@@ -1,6 +1,7 @@
 import type { Chat, Message, PlainMessage } from "../types";
+import { formatIsoDate } from "../lib/format";
 
-const DATE_LINE = /^-{15} (\d{4}년 \d{1,2}월 \d{1,2}일) .*-{15}$/;
+const DATE_LINE = /^-{15} (\d{4})년 (\d{1,2})월 (\d{1,2})일 .*-{15}$/;
 const MESSAGE_LINE = /^\[(.*)\] \[(\d{1,2}:\d{1,2})\] (.*)$/;
 
 export function parseWindows(text: string): Chat | null {
@@ -18,8 +19,12 @@ export function parseWindows(text: string): Chat | null {
 
     const dateMatch = line.match(DATE_LINE);
     if (dateMatch) {
-      currentDate = dateMatch[1];
-      messages.push({ kind: "notification", date: currentDate, text: currentDate });
+      currentDate = formatIsoDate(
+        parseInt(dateMatch[1], 10),
+        parseInt(dateMatch[2], 10),
+        parseInt(dateMatch[3], 10)
+      );
+      messages.push({ kind: "date-header", date: currentDate });
       continue;
     }
 

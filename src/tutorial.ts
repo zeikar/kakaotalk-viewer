@@ -11,7 +11,7 @@ export function createTutorialChat(): Chat {
     roomName: APP_NAME,
     users: [APP_NAME],
     messages: [
-      { kind: "notification", date, text: date },
+      { kind: "date-header", date },
       {
         kind: "plain",
         username: APP_NAME,

@@ -1,4 +1,5 @@
 import type { Message } from "../types";
+import { DateHeaderRow } from "./date-header-row";
 import { NotificationRow } from "./notification-row";
 import { PlainMessageBody } from "./plain-message-body";
 import { ProfileAvatar, ProfileAvatarPlaceholder } from "./profile-avatar";
@@ -25,14 +26,18 @@ export function MessageRow({
   isCurrentMatch,
   onDateHeaderClick,
 }: Props) {
+  if (message.kind === "date-header") {
+    return (
+      <DateHeaderRow date={message.date} onDateClick={onDateHeaderClick} />
+    );
+  }
+
   if (message.kind === "notification") {
     return (
       <NotificationRow
         text={message.text}
-        date={message.date}
         searchQuery={searchQuery}
         isCurrentMatch={isCurrentMatch}
-        onDateClick={onDateHeaderClick}
       />
     );
   }

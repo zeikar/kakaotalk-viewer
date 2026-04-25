@@ -12,6 +12,11 @@ export interface NotificationMessage {
   text: string;
 }
 
+export interface DateHeaderMessage {
+  kind: "date-header";
+  date: string;
+}
+
 export interface SelectMessage {
   kind: "select";
   username: string;
@@ -20,7 +25,11 @@ export interface SelectMessage {
   options: string[];
 }
 
-export type Message = PlainMessage | NotificationMessage | SelectMessage;
+export type Message =
+  | PlainMessage
+  | NotificationMessage
+  | DateHeaderMessage
+  | SelectMessage;
 
 export interface Chat {
   roomName: string;

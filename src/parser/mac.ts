@@ -1,4 +1,5 @@
 import type { Chat, Message } from "../types";
+import { formatIsoDate } from "../lib/format";
 
 const SYSTEM_MESSAGE_PATTERNS = [
   {
@@ -34,7 +35,7 @@ export function parseMac(text: string): Chat | null {
 
     if (currentDate !== date) {
       currentDate = date;
-      messages.push({ kind: "notification", date, text: date });
+      messages.push({ kind: "date-header", date });
     }
 
     const systemMessage = getSystemMessageText(message);
@@ -120,7 +121,11 @@ function parseCsvRows(text: string): Array<[string, string, string]> {
 
 function formatDate(str: string): string {
   const date = new Date(str);
-  return `${date.getFullYear()}년 ${date.getMonth() + 1}월 ${date.getDate()}일`;
+  return formatIsoDate(
+    date.getFullYear(),
+    date.getMonth() + 1,
+    date.getDate()
+  );
 }
 
 function formatTime(str: string): string {

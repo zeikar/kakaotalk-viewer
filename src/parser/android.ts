@@ -1,7 +1,7 @@
 import type { Chat, Message, PlainMessage } from "../types";
-import { convert12TimeTo24Time } from "../lib/format";
+import { convert12TimeTo24Time, formatIsoDate } from "../lib/format";
 
-const DATE_LINE = /^(\d{4}년 \d{1,2}월 \d{1,2}일) .*$/;
+const DATE_LINE = /^(\d{4})년 (\d{1,2})월 (\d{1,2})일 .*$/;
 const MESSAGE_LINE =
   /^\d{4}년 \d{1,2}월 \d{1,2}일 (오전|오후) (\d{1,2}:\d{1,2}), (.*) : (.*)$/;
 const NOTIFICATION_LINE =
@@ -31,10 +31,14 @@ export function parseAndroid(text: string): Chat | null {
         if (last && last.kind === "plain") last.text += "\n" + line;
         continue;
       }
-      const date = dateMatch[1];
+      const date = formatIsoDate(
+        parseInt(dateMatch[1], 10),
+        parseInt(dateMatch[2], 10),
+        parseInt(dateMatch[3], 10)
+      );
       if (currentDate !== date) {
         currentDate = date;
-        messages.push({ kind: "notification", date, text: date });
+        messages.push({ kind: "date-header", date });
       }
       continue;
     }

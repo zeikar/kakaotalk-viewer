@@ -4,7 +4,7 @@ import {
   ChevronRightIcon,
   XMarkIcon,
 } from "@heroicons/react/20/solid";
-import { formatKakaoDate, parseKakaoDate } from "../lib/date-index";
+import { formatIsoDate, parseIsoDate } from "../lib/format";
 
 interface Props {
   dateIndex: Map<string, number>;
@@ -20,12 +20,12 @@ function pickInitialMonth(
   initialDate: string | null,
   dateIndex: Map<string, number>
 ): { year: number; month: number } {
-  const fromInitial = initialDate ? parseKakaoDate(initialDate) : null;
+  const fromInitial = initialDate ? parseIsoDate(initialDate) : null;
   if (fromInitial) return { year: fromInitial.year, month: fromInitial.month };
 
   let latest: { year: number; month: number; day: number } | null = null;
   for (const key of dateIndex.keys()) {
-    const parsed = parseKakaoDate(key);
+    const parsed = parseIsoDate(key);
     if (!parsed) continue;
     if (
       !latest ||
@@ -85,7 +85,7 @@ export function DatePicker({
     [];
   for (let i = 0; i < firstDayOfWeek; i++) cells.push(null);
   for (let day = 1; day <= daysInMonth; day++) {
-    const key = formatKakaoDate(year, month, day);
+    const key = formatIsoDate(year, month, day);
     cells.push({ day, key, index: dateIndex.get(key) });
   }
 

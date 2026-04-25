@@ -12,6 +12,8 @@ function getSearchableTexts(message: Message): string[] {
       return [message.text];
     case "select":
       return message.options;
+    case "date-header":
+      return [];
   }
 }
 

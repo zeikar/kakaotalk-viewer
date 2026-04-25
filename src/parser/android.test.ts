@@ -34,34 +34,33 @@ describe("parseAndroid", () => {
       users: ["테스트", "나"],
       messages: [
         {
-          kind: "notification",
-          date: "2021년 12월 29일",
-          text: "2021년 12월 29일",
+          kind: "date-header",
+          date: "2021-12-29",
         },
         {
           kind: "plain",
           username: "",
-          date: "2021년 12월 29일",
+          date: "2021-12-29",
           time: "20:35",
           text: "시스템 알림",
         },
         {
           kind: "plain",
           username: "테스트",
-          date: "2021년 12월 29일",
+          date: "2021-12-29",
           time: "20:36",
           text: "ㅎㅇ\n이어지는 줄",
         },
         {
           kind: "plain",
           username: "나",
-          date: "2021년 12월 29일",
+          date: "2021-12-29",
           time: "20:37",
           text: "반가워",
         },
         {
           kind: "notification",
-          date: "2021년 12월 29일",
+          date: "2021-12-29",
           text: "테스트님이 나갔습니다.",
         },
       ],
@@ -112,7 +111,7 @@ broken, comma line
     expect(
       chat?.messages.filter(
         (message) =>
-          message.kind === "notification" && message.text === "2026년 4월 24일"
+          message.kind === "date-header" && message.date === "2026-04-24"
       )
     ).toHaveLength(1);
   });
@@ -146,7 +145,7 @@ Built by gskinner.com with Flex 3 [adobe.com/go/flex] and Spelling Plus Library 
     expect(chat?.messages[6]).toMatchObject({
       kind: "plain",
       username: "나",
-      date: "2021년 12월 30일",
+      date: "2021-12-30",
       time: "22:06",
     });
     expect(chat?.messages[6]?.kind === "plain" && chat.messages[6].text).toContain(
