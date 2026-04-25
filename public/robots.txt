@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://zeikar.github.io/kakaotalk-viewer/sitemap.xml
