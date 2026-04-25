@@ -43,6 +43,8 @@ export function App() {
     [chat.messages]
   );
 
+  const oldestIndex = chat.messages.length === 0 ? null : 0;
+
   const recentIndex = useMemo(() => {
     if (chat.messages.length === 0) return null;
     const lastDate = chat.messages[chat.messages.length - 1].date;
@@ -228,6 +230,7 @@ export function App() {
         {datePickerOpen && (
           <DatePicker
             dateIndex={dateIndex}
+            oldestIndex={oldestIndex}
             recentIndex={recentIndex}
             initialDate={datePickerInitialDate}
             onPick={handleDatePick}

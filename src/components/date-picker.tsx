@@ -8,6 +8,7 @@ import { formatIsoDate, parseIsoDate } from "../lib/format";
 
 interface Props {
   dateIndex: Map<string, number>;
+  oldestIndex: number | null;
   recentIndex: number | null;
   initialDate: string | null;
   onPick: (messageIndex: number) => void;
@@ -46,6 +47,7 @@ function pickInitialMonth(
 
 export function DatePicker({
   dateIndex,
+  oldestIndex,
   recentIndex,
   initialDate,
   onPick,
@@ -79,6 +81,7 @@ export function DatePicker({
         : { year: v.year, month: v.month + 1 }
     );
 
+  const oldestDisabled = oldestIndex === null;
   const recentDisabled = recentIndex === null;
 
   const cells: ({ day: number; key: string; index: number | undefined } | null)[] =
@@ -129,16 +132,28 @@ export function DatePicker({
               <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
             </button>
           </div>
-          <button
-            type="button"
-            onClick={() => {
-              if (recentIndex !== null) onPick(recentIndex);
-            }}
-            disabled={recentDisabled}
-            class="text-sm rounded-full border border-black/30 px-3 py-1 cursor-pointer disabled:cursor-not-allowed disabled:opacity-40"
-          >
-            최근
-          </button>
+          <div class="flex items-center gap-1">
+            <button
+              type="button"
+              onClick={() => {
+                if (oldestIndex !== null) onPick(oldestIndex);
+              }}
+              disabled={oldestDisabled}
+              class="text-sm rounded-full border border-black/30 px-3 py-1 cursor-pointer disabled:cursor-not-allowed disabled:opacity-40"
+            >
+              맨 처음
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                if (recentIndex !== null) onPick(recentIndex);
+              }}
+              disabled={recentDisabled}
+              class="text-sm rounded-full border border-black/30 px-3 py-1 cursor-pointer disabled:cursor-not-allowed disabled:opacity-40"
+            >
+              맨 끝
+            </button>
+          </div>
         </div>
 
         <div class="grid grid-cols-7 text-center text-xs opacity-60 mb-1">
