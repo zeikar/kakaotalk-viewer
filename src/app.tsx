@@ -8,7 +8,7 @@ import { SearchBar } from "./components/search-bar";
 import { SideMenu } from "./components/side-menu";
 import { buildDateIndex } from "./lib/date-index";
 import { readFile } from "./lib/read-file";
-import { getCurrentDate, getCurrentTime } from "./lib/format";
+import { formatDateKorean, getCurrentDate, getCurrentTime } from "./lib/format";
 import { findMatches } from "./lib/search";
 import { parseKakaoTalkText } from "./parser";
 import { createTutorialChat } from "./tutorial";
@@ -32,6 +32,10 @@ export function App() {
     string | null
   >(null);
   const virtuosoRef = useRef<VirtuosoHandle>(null);
+  const visibleStartRef = useRef(0);
+  const scrollPillTimerRef = useRef<number | null>(null);
+  const [scrollingDate, setScrollingDate] = useState<string | null>(null);
+  const [scrollProgress, setScrollProgress] = useState(1);
 
   const matches = useMemo(
     () => findMatches(chat.messages, searchQuery),
@@ -74,6 +78,43 @@ export function App() {
     },
     [closeDatePicker]
   );
+
+  const handleVisibleStartChange = useCallback(
+    (index: number) => {
+      visibleStartRef.current = index;
+      const msg = chat.messages[index];
+      if (msg) setScrollingDate(msg.date);
+    },
+    [chat.messages]
+  );
+
+  const handleScroll = useCallback((event: Event) => {
+    const el = event.target as HTMLElement;
+    const max = el.scrollHeight - el.clientHeight;
+    setScrollProgress(max > 0 ? el.scrollTop / max : 1);
+  }, []);
+
+  const handleScrollingChange = useCallback((scrolling: boolean) => {
+    if (scrollPillTimerRef.current !== null) {
+      clearTimeout(scrollPillTimerRef.current);
+      scrollPillTimerRef.current = null;
+    }
+    if (!scrolling) {
+      scrollPillTimerRef.current = window.setTimeout(() => {
+        setScrollingDate(null);
+        scrollPillTimerRef.current = null;
+      }, 800);
+    }
+  }, []);
+
+  useEffect(() => {
+    visibleStartRef.current = Math.max(0, chat.messages.length - 1);
+    setScrollingDate(null);
+    if (scrollPillTimerRef.current !== null) {
+      clearTimeout(scrollPillTimerRef.current);
+      scrollPillTimerRef.current = null;
+    }
+  }, [chatKey]);
 
   useEffect(() => {
     setCurrentMatchIdx(0);
@@ -199,7 +240,10 @@ export function App() {
           onToggleSearch={() => setSearchOpen((v) => !v)}
           onToggleDatePicker={() => {
             if (datePickerOpen) closeDatePicker();
-            else openDatePickerAt(null);
+            else {
+              const visible = chat.messages[visibleStartRef.current];
+              openDatePickerAt(visible?.date ?? null);
+            }
           }}
         />
         {searchOpen && (
@@ -213,18 +257,34 @@ export function App() {
             onClose={closeSearch}
           />
         )}
-        <MessageList
-          key={chatKey}
-          messages={chat.messages}
-          owner={owner}
-          onSelectOwner={handleSelectOwner}
-          virtuosoRef={virtuosoRef}
-          searchQuery={searchOpen ? searchQuery : ""}
-          currentMatchMessageIndex={
-            searchOpen && matches.length > 0 ? matches[currentMatchIdx] : null
-          }
-          onDateHeaderClick={openDatePickerAt}
-        />
+        <div class="relative flex flex-col flex-1 min-h-0 min-w-0">
+          <MessageList
+            key={chatKey}
+            messages={chat.messages}
+            owner={owner}
+            onSelectOwner={handleSelectOwner}
+            virtuosoRef={virtuosoRef}
+            searchQuery={searchOpen ? searchQuery : ""}
+            currentMatchMessageIndex={
+              searchOpen && matches.length > 0 ? matches[currentMatchIdx] : null
+            }
+            onDateHeaderClick={openDatePickerAt}
+            onVisibleStartChange={handleVisibleStartChange}
+            onScrollingChange={handleScrollingChange}
+            onScroll={handleScroll}
+          />
+          {scrollingDate && (
+            <div
+              class="pointer-events-none absolute right-4 z-10 bg-kakao-timestamp/80 text-white text-xs rounded-full px-2.5 py-1 shadow"
+              style={{
+                top: `${scrollProgress * 100}%`,
+                transform: `translateY(-${scrollProgress * 100}%)`,
+              }}
+            >
+              {formatDateKorean(scrollingDate)}
+            </div>
+          )}
+        </div>
         <Reply onFile={handleFile} />
         <SideMenu open={menuOpen} onClose={() => setMenuOpen(false)} />
         {datePickerOpen && (

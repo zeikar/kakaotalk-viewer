@@ -11,6 +11,9 @@ interface Props {
   searchQuery: string;
   currentMatchMessageIndex: number | null;
   onDateHeaderClick?: (date: string) => void;
+  onVisibleStartChange?: (index: number) => void;
+  onScrollingChange?: (scrolling: boolean) => void;
+  onScroll?: (event: Event) => void;
 }
 
 export function MessageList({
@@ -21,6 +24,9 @@ export function MessageList({
   searchQuery,
   currentMatchMessageIndex,
   onDateHeaderClick,
+  onVisibleStartChange,
+  onScrollingChange,
+  onScroll,
 }: Props) {
   return (
     <Virtuoso
@@ -30,6 +36,9 @@ export function MessageList({
       initialTopMostItemIndex={Math.max(0, messages.length - 1)}
       followOutput="auto"
       increaseViewportBy={400}
+      rangeChanged={(range) => onVisibleStartChange?.(range.startIndex)}
+      isScrolling={(scrolling) => onScrollingChange?.(scrolling)}
+      onScroll={onScroll}
       components={{
         Header: () => <div class="h-2" />,
         Footer: () => <div class="h-3" />,
