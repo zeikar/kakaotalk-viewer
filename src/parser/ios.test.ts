@@ -153,6 +153,34 @@ Dec 31, 2014 at 19:12, 테스트 : hello`);
     });
   });
 
+  test("parses Korean iOS message lines with dot-form dates", () => {
+    const chat = parseIos(`P2 님과 카카오톡 대화
+저장한 날짜 : 2019. 7. 30. 오전 11:02
+
+
+2019년 7월 30일 화요일
+2019. 7. 30. 오전 10:22, P1 : 부먹? 찍먹?
+2019. 7. 30. 오후 12:23, P2 : 전 솔직히 둘다 좋아해요`);
+
+    expect(chat?.messages).toEqual([
+      { kind: "date-header", date: "2019-07-30" },
+      {
+        kind: "plain",
+        username: "P1",
+        date: "2019-07-30",
+        time: "10:22",
+        text: "부먹? 찍먹?",
+      },
+      {
+        kind: "plain",
+        username: "P2",
+        date: "2019-07-30",
+        time: "12:23",
+        text: "전 솔직히 둘다 좋아해요",
+      },
+    ]);
+  });
+
   test("parses English iOS date headers, messages, and notifications", () => {
     const chat = parseIos(`Talk_2026.4.25 10:20-1.txt
 Date Saved : Apr 25, 2026 at 10:38

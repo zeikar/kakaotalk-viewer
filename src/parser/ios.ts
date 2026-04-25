@@ -21,6 +21,8 @@ const DATE_LINE_EN = new RegExp(
   `^\\w+, (${MONTH_PATTERN_EN}) (\\d{1,2}), (\\d{4})$`
 );
 const MESSAGE_LINE_KO = /^(오전|오후) (\d{1,2}:\d{1,2}), (.*?) : (.*)$/;
+const MESSAGE_LINE_KO_WITH_DATE =
+  /^(\d{4})\. ?(\d{1,2})\. ?(\d{1,2})\. (오전|오후) (\d{1,2}:\d{1,2}), (.*?) : (.*)$/;
 const NOTIFICATION_LINE_KO = /^(오전|오후) \d{1,2}:\d{1,2}, (.*)$/;
 const MESSAGE_LINE_EN = new RegExp(
   `^(${MONTH_PATTERN_EN}) (\\d{1,2}), (\\d{4}) at (\\d{1,2}:\\d{2}), (.*?) : (.*)$`
@@ -38,6 +40,7 @@ export function isIosExport(text: string): boolean {
     if (matchDateLine(line)) continue;
     return (
       MESSAGE_LINE_KO.test(line) ||
+      MESSAGE_LINE_KO_WITH_DATE.test(line) ||
       NOTIFICATION_LINE_KO.test(line) ||
       MESSAGE_LINE_EN.test(line) ||
       NOTIFICATION_LINE_EN.test(line)
@@ -140,6 +143,20 @@ function matchMessageLine(
       date: currentDate,
       time: convert12TimeTo24Time(ko[2], ko[1]),
       text: ko[4],
+    };
+  }
+
+  const koWithDate = line.match(MESSAGE_LINE_KO_WITH_DATE);
+  if (koWithDate) {
+    return {
+      username: koWithDate[6],
+      date: formatIsoDate(
+        parseInt(koWithDate[1], 10),
+        parseInt(koWithDate[2], 10),
+        parseInt(koWithDate[3], 10)
+      ),
+      time: convert12TimeTo24Time(koWithDate[5], koWithDate[4]),
+      text: koWithDate[7],
     };
   }
 

@@ -98,6 +98,33 @@ describe("parseWindows", () => {
     ]);
   });
 
+  test("parses Korean 12-hour message times from PC exports", () => {
+    const chat = parseWindows(`P2 님과 카카오톡 대화
+저장한 날짜 : 2019-08-14 13:25:39
+
+--------------- 2017년 10월 29일 일요일 ---------------
+[P2] [오후 10:10] 저 소가 무슨 소인지가 궁금했음 ?
+[P1] [오전 12:23] ㅇㅇㅇㅇㅇ`);
+
+    expect(chat?.messages).toEqual([
+      { kind: "date-header", date: "2017-10-29" },
+      {
+        kind: "plain",
+        username: "P2",
+        date: "2017-10-29",
+        time: "22:10",
+        text: "저 소가 무슨 소인지가 궁금했음 ?",
+      },
+      {
+        kind: "plain",
+        username: "P1",
+        date: "2017-10-29",
+        time: "00:23",
+        text: "ㅇㅇㅇㅇㅇ",
+      },
+    ]);
+  });
+
   test("ignores unmatched leading lines before the first message", () => {
     const chat = parseWindows(`테스트 님과 카카오톡 대화
 저장한 날짜 : 2021년 12월 18일 오후 7:17

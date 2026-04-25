@@ -1,5 +1,5 @@
 import type { Chat, Message, PlainMessage } from "../types";
-import { formatIsoDate } from "../lib/format";
+import { convert12TimeTo24Time, formatIsoDate } from "../lib/format";
 
 const DATE_LINE_KO = /^-{15} (\d{4})년 (\d{1,2})월 (\d{1,2})일 .*-{15}$/;
 
@@ -21,7 +21,7 @@ const DATE_LINE_EN = new RegExp(
   `^-{15} \\w+, (${MONTHS_EN.join("|")}) (\\d{1,2}), (\\d{4}) -{15}$`
 );
 
-const MESSAGE_LINE = /^\[(.*)\] \[(\d{1,2}:\d{1,2})\] (.*)$/;
+const MESSAGE_LINE = /^\[(.*)\] \[(?:(오전|오후) )?(\d{1,2}:\d{1,2})\] (.*)$/;
 
 function matchDateLine(line: string): string | null {
   const ko = line.match(DATE_LINE_KO);
@@ -80,7 +80,8 @@ export function parseWindows(text: string): Chat | null {
       continue;
     }
 
-    const [, username, time, text] = messageMatch;
+    const [, username, ampm, rawTime, text] = messageMatch;
+    const time = ampm ? convert12TimeTo24Time(rawTime, ampm) : rawTime;
 
     if (username.trim().length > 0 && !users.includes(username)) {
       users.push(username);
