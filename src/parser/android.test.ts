@@ -31,7 +31,7 @@ describe("parseAndroid", () => {
 
     expect(chat).toEqual({
       roomName: "팀 채팅방",
-      users: ["테스트", "나"],
+      users: ["나", "테스트"],
       messages: [
         {
           kind: "date-header",

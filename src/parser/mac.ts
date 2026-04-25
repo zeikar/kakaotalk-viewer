@@ -55,6 +55,7 @@ export function parseMac(text: string): Chat | null {
     });
   }
 
+  users.sort((a, b) => a.localeCompare(b));
   const roomName = users.length <= 3 ? users.join(", ") : "단체방";
 
   return { roomName, users, messages };

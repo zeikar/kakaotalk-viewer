@@ -21,7 +21,7 @@ describe("parseWindows", () => {
 
     expect(chat).toEqual({
       roomName: "테스트",
-      users: ["테스트", "나"],
+      users: ["나", "테스트"],
       messages: [
         {
           kind: "date-header",

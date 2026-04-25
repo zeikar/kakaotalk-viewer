@@ -24,8 +24,8 @@ describe("parseMac", () => {
 `);
 
     expect(chat).toEqual({
-      roomName: "테스트, 나, 수아",
-      users: ["테스트", "나", "수아"],
+      roomName: "나, 수아, 테스트",
+      users: ["나", "수아", "테스트"],
       messages: [
         {
           kind: "date-header",

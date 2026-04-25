@@ -289,7 +289,11 @@ export function App() {
           )}
         </div>
         <Reply onFile={handleFile} />
-        <SideMenu open={menuOpen} onClose={() => setMenuOpen(false)} />
+        <SideMenu
+          open={menuOpen}
+          onClose={() => setMenuOpen(false)}
+          users={chat.users}
+        />
         {datePickerOpen && (
           <DatePicker
             dateIndex={dateIndex}

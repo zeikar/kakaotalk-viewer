@@ -74,5 +74,6 @@ export function parseAndroid(text: string): Chat | null {
     messages.push(msg);
   }
 
+  users.sort((a, b) => a.localeCompare(b));
   return { roomName, users, messages };
 }

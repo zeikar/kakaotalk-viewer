@@ -4,7 +4,7 @@ import { SideMenu } from "./side-menu";
 
 describe("SideMenu", () => {
   test("is visible and slid into view when open=true", () => {
-    const { container } = render(<SideMenu open={true} onClose={() => {}} />);
+    const { container } = render(<SideMenu open={true} onClose={() => {}} users={[]} />);
     const overlay = container.querySelector("[aria-hidden='true']");
     const panel = container.querySelector("aside");
     expect(overlay).toHaveClass("visible");
@@ -12,7 +12,7 @@ describe("SideMenu", () => {
   });
 
   test("is hidden and off-screen when open=false", () => {
-    const { container } = render(<SideMenu open={false} onClose={() => {}} />);
+    const { container } = render(<SideMenu open={false} onClose={() => {}} users={[]} />);
     const overlay = container.querySelector("[aria-hidden='true']");
     const panel = container.querySelector("aside");
     expect(overlay).toHaveClass("invisible");
@@ -21,22 +21,39 @@ describe("SideMenu", () => {
 
   test("fires onClose when the close button is clicked", () => {
     const onClose = vi.fn();
-    render(<SideMenu open={true} onClose={onClose} />);
+    render(<SideMenu open={true} onClose={onClose} users={[]} />);
     fireEvent.click(screen.getByRole("button", { name: "메뉴 닫기" }));
     expect(onClose).toHaveBeenCalledTimes(1);
   });
 
   test("fires onClose when the backdrop overlay is clicked", () => {
     const onClose = vi.fn();
-    const { container } = render(<SideMenu open={true} onClose={onClose} />);
+    const { container } = render(<SideMenu open={true} onClose={onClose} users={[]} />);
     const overlay = container.querySelector("[aria-hidden='true']") as HTMLElement;
     fireEvent.click(overlay);
     expect(onClose).toHaveBeenCalledTimes(1);
   });
 
   test("exposes a GitHub link with the project URL", () => {
-    render(<SideMenu open={true} onClose={() => {}} />);
+    render(<SideMenu open={true} onClose={() => {}} users={[]} />);
     const link = screen.getByRole("link", { name: "GitHub" });
     expect(link).toHaveAttribute("href", "https://github.com/zeikar/kakaotalk-viewer");
+  });
+
+  test("renders the participants section with each name and the count", () => {
+    render(
+      <SideMenu open={true} onClose={() => {}} users={["나", "수아", "테스트"]} />
+    );
+    expect(screen.getByText("참여자 (3)")).toBeInTheDocument();
+    const items = screen.getAllByRole("listitem");
+    expect(items).toHaveLength(3);
+    expect(items[0]).toHaveTextContent("나");
+    expect(items[1]).toHaveTextContent("수아");
+    expect(items[2]).toHaveTextContent("테스트");
+  });
+
+  test("hides the participants section when users is empty", () => {
+    render(<SideMenu open={true} onClose={() => {}} users={[]} />);
+    expect(screen.queryByText(/^참여자/)).not.toBeInTheDocument();
   });
 });

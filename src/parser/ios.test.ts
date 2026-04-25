@@ -99,7 +99,7 @@ Dec 31, 2014 at 19:12, 테스트 : hello`);
 
     expect(chat).toEqual({
       roomName: "팀 채팅방",
-      users: ["테스트", "나"],
+      users: ["나", "테스트"],
       messages: [
         {
           kind: "date-header",
@@ -197,7 +197,7 @@ Feb 17, 2015 at 21:01: iPad left this chatroom.`);
 
     expect(chat).toEqual({
       roomName: "Talk_2026.4.25 10:20-1.txt",
-      users: ["테스트", "iPad"],
+      users: ["iPad", "테스트"],
       messages: [
         {
           kind: "date-header",

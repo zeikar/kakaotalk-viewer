@@ -1,11 +1,13 @@
 import { ArrowTopRightOnSquareIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { ProfileAvatar } from "./profile-avatar";
 
 interface Props {
   open: boolean;
   onClose: () => void;
+  users: string[];
 }
 
-export function SideMenu({ open, onClose }: Props) {
+export function SideMenu({ open, onClose, users }: Props) {
   return (
     <>
       <div
@@ -33,6 +35,24 @@ export function SideMenu({ open, onClose }: Props) {
             <XMarkIcon className="h-6 w-6" aria-hidden="true" />
           </button>
         </div>
+
+        {users.length > 0 && (
+          <section class="px-3 pb-3 flex flex-col min-h-0">
+            <h3 class="text-sm font-semibold text-slate-600 mb-2">
+              참여자 ({users.length})
+            </h3>
+            <ul class="overflow-y-auto">
+              {users.map((name) => (
+                <li key={name} class="flex items-center">
+                  <ProfileAvatar username={name} />
+                  <span class="ml-2 truncate text-base text-slate-800">
+                    {name}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
 
         <div class="mt-auto flex justify-center p-3">
           <a
