@@ -10,6 +10,7 @@ interface Props {
   virtuosoRef?: Ref<VirtuosoHandle>;
   searchQuery: string;
   currentMatchMessageIndex: number | null;
+  onDateHeaderClick?: (date: string) => void;
 }
 
 export function MessageList({
@@ -19,6 +20,7 @@ export function MessageList({
   virtuosoRef,
   searchQuery,
   currentMatchMessageIndex,
+  onDateHeaderClick,
 }: Props) {
   return (
     <Virtuoso
@@ -42,6 +44,7 @@ export function MessageList({
           onSelectOwner={onSelectOwner}
           searchQuery={searchQuery}
           isCurrentMatch={index === currentMatchMessageIndex}
+          onDateHeaderClick={onDateHeaderClick}
         />
       )}
     />

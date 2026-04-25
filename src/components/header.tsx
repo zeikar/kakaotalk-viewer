@@ -2,22 +2,39 @@ import {
   ArrowLeftIcon,
   Bars3Icon,
 } from "@heroicons/react/24/outline";
-import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
+import {
+  CalendarIcon,
+  MagnifyingGlassIcon,
+} from "@heroicons/react/20/solid";
 
 interface Props {
   title: string;
   onOpenMenu: () => void;
   onToggleSearch: () => void;
+  onToggleDatePicker: () => void;
 }
 
-export function Header({ title, onOpenMenu, onToggleSearch }: Props) {
+export function Header({
+  title,
+  onOpenMenu,
+  onToggleSearch,
+  onToggleDatePicker,
+}: Props) {
   return (
-    <header class="bg-kakao-bg grid grid-cols-[3rem,minmax(0,1fr),5rem] items-center px-3 h-[50px] flex-shrink-0">
+    <header class="bg-kakao-bg grid grid-cols-[3rem,minmax(0,1fr),6.5rem] items-center px-3 h-[50px] flex-shrink-0">
       <div class="flex items-center justify-start">
         <ArrowLeftIcon className="h-6 w-6" aria-hidden="true" />
       </div>
       <h1 class="min-w-0 text-lg font-semibold truncate text-center">{title}</h1>
       <div class="flex items-center justify-end gap-1">
+        <button
+          type="button"
+          aria-label="날짜로 이동"
+          onClick={onToggleDatePicker}
+          class="flex h-8 w-8 items-center justify-center cursor-pointer"
+        >
+          <CalendarIcon className="h-5 w-5" aria-hidden="true" />
+        </button>
         <button
           type="button"
           aria-label="검색 열기"

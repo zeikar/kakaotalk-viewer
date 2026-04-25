@@ -12,6 +12,7 @@ interface Props {
   onSelectOwner: (username: string) => void;
   searchQuery: string;
   isCurrentMatch: boolean;
+  onDateHeaderClick?: (date: string) => void;
 }
 
 export function MessageRow({
@@ -22,13 +23,16 @@ export function MessageRow({
   onSelectOwner,
   searchQuery,
   isCurrentMatch,
+  onDateHeaderClick,
 }: Props) {
   if (message.kind === "notification") {
     return (
       <NotificationRow
         text={message.text}
+        date={message.date}
         searchQuery={searchQuery}
         isCurrentMatch={isCurrentMatch}
+        onDateClick={onDateHeaderClick}
       />
     );
   }

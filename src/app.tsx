@@ -1,10 +1,12 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "preact/hooks";
 import type { VirtuosoHandle } from "react-virtuoso";
+import { DatePicker } from "./components/date-picker";
 import { Header } from "./components/header";
 import { MessageList } from "./components/message-list";
 import { Reply } from "./components/reply";
 import { SearchBar } from "./components/search-bar";
 import { SideMenu } from "./components/side-menu";
+import { buildDateIndex } from "./lib/date-index";
 import { readFile } from "./lib/read-file";
 import { getCurrentDate, getCurrentTime } from "./lib/format";
 import { findMatches } from "./lib/search";
@@ -25,6 +27,10 @@ export function App() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentMatchIdx, setCurrentMatchIdx] = useState(0);
+  const [datePickerOpen, setDatePickerOpen] = useState(false);
+  const [datePickerInitialDate, setDatePickerInitialDate] = useState<
+    string | null
+  >(null);
   const virtuosoRef = useRef<VirtuosoHandle>(null);
 
   const matches = useMemo(
@@ -32,11 +38,40 @@ export function App() {
     [chat.messages, searchQuery]
   );
 
+  const dateIndex = useMemo(
+    () => buildDateIndex(chat.messages),
+    [chat.messages]
+  );
+
+  const recentIndex = useMemo(() => {
+    if (chat.messages.length === 0) return null;
+    const lastDate = chat.messages[chat.messages.length - 1].date;
+    return dateIndex.get(lastDate) ?? null;
+  }, [chat.messages, dateIndex]);
+
   const closeSearch = useCallback(() => {
     setSearchOpen(false);
     setSearchQuery("");
     setCurrentMatchIdx(0);
   }, []);
+
+  const closeDatePicker = useCallback(() => {
+    setDatePickerOpen(false);
+    setDatePickerInitialDate(null);
+  }, []);
+
+  const openDatePickerAt = useCallback((date: string | null) => {
+    setDatePickerInitialDate(date);
+    setDatePickerOpen(true);
+  }, []);
+
+  const handleDatePick = useCallback(
+    (index: number) => {
+      virtuosoRef.current?.scrollToIndex({ index, align: "start" });
+      closeDatePicker();
+    },
+    [closeDatePicker]
+  );
 
   useEffect(() => {
     setCurrentMatchIdx(0);
@@ -55,14 +90,19 @@ export function App() {
       if ((e.metaKey || e.ctrlKey) && e.key === "f") {
         e.preventDefault();
         setSearchOpen(true);
-      } else if (e.key === "Escape" && searchOpen) {
-        e.preventDefault();
-        closeSearch();
+      } else if (e.key === "Escape") {
+        if (datePickerOpen) {
+          e.preventDefault();
+          closeDatePicker();
+        } else if (searchOpen) {
+          e.preventDefault();
+          closeSearch();
+        }
       }
     };
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [searchOpen, closeSearch]);
+  }, [searchOpen, datePickerOpen, closeSearch, closeDatePicker]);
 
   const handleNext = useCallback(() => {
     setCurrentMatchIdx((i) => (matches.length === 0 ? 0 : (i + 1) % matches.length));
@@ -155,6 +195,10 @@ export function App() {
           title={`${chat.roomName} (${chat.users.length})`}
           onOpenMenu={() => setMenuOpen(true)}
           onToggleSearch={() => setSearchOpen((v) => !v)}
+          onToggleDatePicker={() => {
+            if (datePickerOpen) closeDatePicker();
+            else openDatePickerAt(null);
+          }}
         />
         {searchOpen && (
           <SearchBar
@@ -177,9 +221,19 @@ export function App() {
           currentMatchMessageIndex={
             searchOpen && matches.length > 0 ? matches[currentMatchIdx] : null
           }
+          onDateHeaderClick={openDatePickerAt}
         />
         <Reply onFile={handleFile} />
         <SideMenu open={menuOpen} onClose={() => setMenuOpen(false)} />
+        {datePickerOpen && (
+          <DatePicker
+            dateIndex={dateIndex}
+            recentIndex={recentIndex}
+            initialDate={datePickerInitialDate}
+            onPick={handleDatePick}
+            onClose={closeDatePicker}
+          />
+        )}
       </div>
     </div>
   );
