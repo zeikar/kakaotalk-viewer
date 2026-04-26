@@ -17,6 +17,21 @@ import type { Chat } from "./types";
 
 const SYSTEM_USER = "카카오톡 뷰어";
 
+function findNearestMatchPosition(matches: number[], anchorIndex: number): number {
+  if (matches.length === 0) return 0;
+
+  let nearestPosition = 0;
+  let nearestDistance = Math.abs(matches[0] - anchorIndex);
+  for (let i = 1; i < matches.length; i++) {
+    const distance = Math.abs(matches[i] - anchorIndex);
+    if (distance < nearestDistance) {
+      nearestPosition = i;
+      nearestDistance = distance;
+    }
+  }
+  return nearestPosition;
+}
+
 export function App() {
   const [chat, setChat] = useState<Chat>(() => createTutorialChat());
   const [owner, setOwner] = useState<string | null>(null);
@@ -35,6 +50,7 @@ export function App() {
   >(null);
   const virtuosoRef = useRef<VirtuosoHandle>(null);
   const visibleStartRef = useRef(0);
+  const pendingUserFilterMatchIdxRef = useRef<number | null>(null);
   const scrollPillTimerRef = useRef<number | null>(null);
   const [scrollingDate, setScrollingDate] = useState<string | null>(null);
   const [scrollProgress, setScrollProgress] = useState(1);
@@ -113,7 +129,8 @@ export function App() {
   }, []);
 
   useEffect(() => {
-    visibleStartRef.current = Math.max(0, chat.messages.length - 1);
+    const latestIndex = Math.max(0, chat.messages.length - 1);
+    visibleStartRef.current = latestIndex;
     setScrollingDate(null);
     if (scrollPillTimerRef.current !== null) {
       clearTimeout(scrollPillTimerRef.current);
@@ -122,7 +139,9 @@ export function App() {
   }, [chatKey]);
 
   useEffect(() => {
-    setCurrentMatchIdx(0);
+    const pendingMatchIdx = pendingUserFilterMatchIdxRef.current;
+    pendingUserFilterMatchIdxRef.current = null;
+    setCurrentMatchIdx(pendingMatchIdx ?? 0);
   }, [searchQuery, userFilter]);
 
   useEffect(() => {
@@ -163,11 +182,25 @@ export function App() {
   }, [matches.length]);
 
   const handleSelectUser = useCallback((username: string) => {
+    pendingUserFilterMatchIdxRef.current = null;
     setUserFilter(username);
     setSearchOpen(true);
     setMenuOpen(false);
     setCurrentMatchIdx(0);
   }, []);
+
+  const handleSelectUserFromMessage = useCallback(
+    (username: string, messageIndex: number) => {
+      const nextMatches = findMatches(chat.messages, searchQuery, username);
+      const nextMatchIdx = findNearestMatchPosition(nextMatches, messageIndex);
+      pendingUserFilterMatchIdxRef.current = nextMatchIdx;
+      setUserFilter(username);
+      setSearchOpen(true);
+      setMenuOpen(false);
+      setCurrentMatchIdx(nextMatchIdx);
+    },
+    [chat.messages, searchQuery]
+  );
 
   const appendSystemMessage = useCallback((text: string) => {
     setChat((prev) => ({
@@ -278,7 +311,7 @@ export function App() {
             messages={chat.messages}
             owner={owner}
             onSelectOwner={handleSelectOwner}
-            onSelectUser={handleSelectUser}
+            onSelectUser={handleSelectUserFromMessage}
             virtuosoRef={virtuosoRef}
             searchQuery={searchOpen ? searchQuery : ""}
             currentMatchMessageIndex={
