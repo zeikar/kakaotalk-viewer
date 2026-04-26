@@ -11,6 +11,8 @@ function makeProps(overrides: Partial<Parameters<typeof SearchBar>[0]> = {}) {
     onNext: vi.fn(),
     onPrev: vi.fn(),
     onClose: vi.fn(),
+    userFilter: null,
+    onClearUserFilter: vi.fn(),
     ...overrides,
   };
 }
@@ -79,5 +81,14 @@ describe("SearchBar", () => {
     render(<SearchBar {...props} />);
     fireEvent.keyDown(screen.getByPlaceholderText("메시지 검색"), { key: "Escape" });
     expect(props.onClose).toHaveBeenCalledTimes(1);
+  });
+
+  test("renders a user filter chip and clears it from the chip button", () => {
+    const props = makeProps({ userFilter: "수아" });
+    render(<SearchBar {...props} />);
+
+    expect(screen.getByText("수아")).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "사용자 필터 해제" }));
+    expect(props.onClearUserFilter).toHaveBeenCalledTimes(1);
   });
 });

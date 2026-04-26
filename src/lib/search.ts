@@ -17,12 +17,32 @@ function getSearchableTexts(message: Message): string[] {
   }
 }
 
-export function findMatches(messages: Message[], query: string): number[] {
+export function findMatches(
+  messages: Message[],
+  query: string,
+  userFilter?: string | null
+): number[] {
   const needle = query.trim().toLowerCase();
-  if (needle.length === 0) return [];
+  const hasUserFilter = !!userFilter;
+  if (needle.length === 0 && !hasUserFilter) return [];
 
   const result: number[] = [];
   for (let i = 0; i < messages.length; i++) {
+    const message = messages[i];
+    if (
+      hasUserFilter &&
+      (message.kind === "notification" ||
+        message.kind === "date-header" ||
+        message.username !== userFilter)
+    ) {
+      continue;
+    }
+
+    if (needle.length === 0) {
+      result.push(i);
+      continue;
+    }
+
     const hit = getSearchableTexts(messages[i]).some((text) =>
       text.toLowerCase().includes(needle)
     );

@@ -4,7 +4,14 @@ import { SideMenu } from "./side-menu";
 
 describe("SideMenu", () => {
   test("is visible and slid into view when open=true", () => {
-    const { container } = render(<SideMenu open={true} onClose={() => {}} users={[]} />);
+    const { container } = render(
+      <SideMenu
+        open={true}
+        onClose={() => {}}
+        users={[]}
+        onSelectUser={() => {}}
+      />
+    );
     const overlay = container.querySelector("[aria-hidden='true']");
     const panel = container.querySelector("aside");
     expect(overlay).toHaveClass("visible");
@@ -12,7 +19,14 @@ describe("SideMenu", () => {
   });
 
   test("is hidden and off-screen when open=false", () => {
-    const { container } = render(<SideMenu open={false} onClose={() => {}} users={[]} />);
+    const { container } = render(
+      <SideMenu
+        open={false}
+        onClose={() => {}}
+        users={[]}
+        onSelectUser={() => {}}
+      />
+    );
     const overlay = container.querySelector("[aria-hidden='true']");
     const panel = container.querySelector("aside");
     expect(overlay).toHaveClass("invisible");
@@ -21,28 +35,54 @@ describe("SideMenu", () => {
 
   test("fires onClose when the close button is clicked", () => {
     const onClose = vi.fn();
-    render(<SideMenu open={true} onClose={onClose} users={[]} />);
+    render(
+      <SideMenu
+        open={true}
+        onClose={onClose}
+        users={[]}
+        onSelectUser={() => {}}
+      />
+    );
     fireEvent.click(screen.getByRole("button", { name: "메뉴 닫기" }));
     expect(onClose).toHaveBeenCalledTimes(1);
   });
 
   test("fires onClose when the backdrop overlay is clicked", () => {
     const onClose = vi.fn();
-    const { container } = render(<SideMenu open={true} onClose={onClose} users={[]} />);
+    const { container } = render(
+      <SideMenu
+        open={true}
+        onClose={onClose}
+        users={[]}
+        onSelectUser={() => {}}
+      />
+    );
     const overlay = container.querySelector("[aria-hidden='true']") as HTMLElement;
     fireEvent.click(overlay);
     expect(onClose).toHaveBeenCalledTimes(1);
   });
 
   test("exposes a GitHub link with the project URL", () => {
-    render(<SideMenu open={true} onClose={() => {}} users={[]} />);
+    render(
+      <SideMenu
+        open={true}
+        onClose={() => {}}
+        users={[]}
+        onSelectUser={() => {}}
+      />
+    );
     const link = screen.getByRole("link", { name: "GitHub" });
     expect(link).toHaveAttribute("href", "https://github.com/zeikar/kakaotalk-viewer");
   });
 
   test("renders the participants section with each name and the count", () => {
     render(
-      <SideMenu open={true} onClose={() => {}} users={["나", "수아", "테스트"]} />
+      <SideMenu
+        open={true}
+        onClose={() => {}}
+        users={["나", "수아", "테스트"]}
+        onSelectUser={() => {}}
+      />
     );
     expect(screen.getByText("참여자 (3)")).toBeInTheDocument();
     const items = screen.getAllByRole("listitem");
@@ -53,7 +93,28 @@ describe("SideMenu", () => {
   });
 
   test("hides the participants section when users is empty", () => {
-    render(<SideMenu open={true} onClose={() => {}} users={[]} />);
+    render(
+      <SideMenu
+        open={true}
+        onClose={() => {}}
+        users={[]}
+        onSelectUser={() => {}}
+      />
+    );
     expect(screen.queryByText(/^참여자/)).not.toBeInTheDocument();
+  });
+
+  test("fires onSelectUser when a participant is clicked", () => {
+    const onSelectUser = vi.fn();
+    render(
+      <SideMenu
+        open={true}
+        onClose={() => {}}
+        users={["나", "수아"]}
+        onSelectUser={onSelectUser}
+      />
+    );
+    fireEvent.click(screen.getByRole("button", { name: /수아/ }));
+    expect(onSelectUser).toHaveBeenCalledWith("수아");
   });
 });

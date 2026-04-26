@@ -16,9 +16,9 @@ const notification = (text: string): Message => ({
   text,
 });
 
-const select = (options: string[]): Message => ({
+const select = (options: string[], username = "u"): Message => ({
   kind: "select",
-  username: "u",
+  username,
   date: "2024-01-01",
   time: "12:00",
   options,
@@ -77,6 +77,57 @@ describe("findMatches", () => {
     ];
     expect(findMatches(msgs, "2024")).toEqual([]);
     expect(findMatches(msgs, "01-01")).toEqual([]);
+  });
+
+  test("with only userFilter, returns all plain and select messages for that user", () => {
+    const msgs = [
+      plain("ㅎㅇ", "나"),
+      plain("반가워", "수아"),
+      select(["좋아", "다음에"], "나"),
+      plain("또 보자", "나"),
+    ];
+    expect(findMatches(msgs, "", "나")).toEqual([0, 2, 3]);
+  });
+
+  test("with userFilter and query, returns messages matching both", () => {
+    const msgs = [
+      plain("오늘 점심", "나"),
+      plain("오늘 저녁", "수아"),
+      select(["점심 좋아", "커피"], "나"),
+      plain("내일 점심", "나"),
+    ];
+    expect(findMatches(msgs, "점심", "나")).toEqual([0, 2, 3]);
+  });
+
+  test("returns [] when userFilter matches no users", () => {
+    const msgs = [plain("ㅎㅇ", "나"), select(["반가워"], "수아")];
+    expect(findMatches(msgs, "", "테스트")).toEqual([]);
+    expect(findMatches(msgs, "반가워", "테스트")).toEqual([]);
+  });
+
+  test("excludes notification and date-header messages when userFilter is set", () => {
+    const msgs: Message[] = [
+      notification("나 joined"),
+      { kind: "date-header", date: "2024-01-01" },
+      plain("나 joined", "나"),
+    ];
+    expect(findMatches(msgs, "joined", "나")).toEqual([2]);
+  });
+
+  test("matches select messages by username when userFilter is set", () => {
+    const msgs = [select(["ㅎㅇ"], "나"), select(["ㅎㅇ"], "수아")];
+    expect(findMatches(msgs, "ㅎㅇ", "수아")).toEqual([1]);
+  });
+
+  test("empty string, null, and undefined userFilter behave like query-only search", () => {
+    const msgs = [
+      plain("ㅎㅇ", "나"),
+      notification("ㅎㅇ"),
+      select(["ㅎㅇ"], "수아"),
+    ];
+    expect(findMatches(msgs, "ㅎㅇ", "")).toEqual([0, 1, 2]);
+    expect(findMatches(msgs, "ㅎㅇ", null)).toEqual([0, 1, 2]);
+    expect(findMatches(msgs, "ㅎㅇ", undefined)).toEqual([0, 1, 2]);
   });
 });
 

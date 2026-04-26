@@ -27,6 +27,7 @@ export function App() {
   const [chatKey, setChatKey] = useState(0);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [userFilter, setUserFilter] = useState<string | null>(null);
   const [currentMatchIdx, setCurrentMatchIdx] = useState(0);
   const [datePickerOpen, setDatePickerOpen] = useState(false);
   const [datePickerInitialDate, setDatePickerInitialDate] = useState<
@@ -39,8 +40,8 @@ export function App() {
   const [scrollProgress, setScrollProgress] = useState(1);
 
   const matches = useMemo(
-    () => findMatches(chat.messages, searchQuery),
-    [chat.messages, searchQuery]
+    () => findMatches(chat.messages, searchQuery, userFilter),
+    [chat.messages, searchQuery, userFilter]
   );
 
   const dateIndex = useMemo(
@@ -59,6 +60,7 @@ export function App() {
   const closeSearch = useCallback(() => {
     setSearchOpen(false);
     setSearchQuery("");
+    setUserFilter(null);
     setCurrentMatchIdx(0);
   }, []);
 
@@ -121,7 +123,7 @@ export function App() {
 
   useEffect(() => {
     setCurrentMatchIdx(0);
-  }, [searchQuery]);
+  }, [searchQuery, userFilter]);
 
   useEffect(() => {
     if (matches.length === 0) return;
@@ -159,6 +161,13 @@ export function App() {
       matches.length === 0 ? 0 : (i - 1 + matches.length) % matches.length
     );
   }, [matches.length]);
+
+  const handleSelectUser = useCallback((username: string) => {
+    setUserFilter(username);
+    setSearchOpen(true);
+    setMenuOpen(false);
+    setCurrentMatchIdx(0);
+  }, []);
 
   const appendSystemMessage = useCallback((text: string) => {
     setChat((prev) => ({
@@ -258,6 +267,8 @@ export function App() {
             onNext={handleNext}
             onPrev={handlePrev}
             onClose={closeSearch}
+            userFilter={userFilter}
+            onClearUserFilter={() => setUserFilter(null)}
           />
         )}
         <div class="relative flex flex-col flex-1 min-h-0 min-w-0">
@@ -293,6 +304,7 @@ export function App() {
           open={menuOpen}
           onClose={() => setMenuOpen(false)}
           users={chat.users}
+          onSelectUser={handleSelectUser}
         />
         {datePickerOpen && (
           <DatePicker

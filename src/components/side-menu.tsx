@@ -5,9 +5,10 @@ interface Props {
   open: boolean;
   onClose: () => void;
   users: string[];
+  onSelectUser: (username: string) => void;
 }
 
-export function SideMenu({ open, onClose, users }: Props) {
+export function SideMenu({ open, onClose, users, onSelectUser }: Props) {
   return (
     <>
       <div
@@ -43,11 +44,17 @@ export function SideMenu({ open, onClose, users }: Props) {
             </h3>
             <ul class="overflow-y-auto">
               {users.map((name) => (
-                <li key={name} class="flex items-center">
-                  <ProfileAvatar username={name} />
-                  <span class="ml-2 truncate text-base text-slate-800">
-                    {name}
-                  </span>
+                <li key={name}>
+                  <button
+                    type="button"
+                    class="flex w-full items-center rounded-md text-left cursor-pointer hover:bg-slate-100 focus:bg-slate-100 focus:outline-none"
+                    onClick={() => onSelectUser(name)}
+                  >
+                    <ProfileAvatar username={name} />
+                    <span class="ml-2 truncate text-base text-slate-800">
+                      {name}
+                    </span>
+                  </button>
                 </li>
               ))}
             </ul>
