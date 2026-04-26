@@ -6,16 +6,21 @@ interface Props {
   open: boolean;
   onClose: () => void;
   users: string[];
+  owner?: string | null;
   onSelectUser: (username: string) => void;
 }
 
-export function SideMenu({ open, onClose, users, onSelectUser }: Props) {
+export function SideMenu({ open, onClose, users, owner, onSelectUser }: Props) {
   const [userQuery, setUserQuery] = useState("");
   const normalizedQuery = userQuery.trim().toLowerCase();
   const filteredUsers =
     normalizedQuery.length === 0
       ? users
       : users.filter((name) => name.toLowerCase().includes(normalizedQuery));
+  const displayUsers =
+    owner && filteredUsers.includes(owner)
+      ? [owner, ...filteredUsers.filter((name) => name !== owner)]
+      : filteredUsers;
 
   useEffect(() => {
     if (!open) setUserQuery("");
@@ -63,7 +68,7 @@ export function SideMenu({ open, onClose, users, onSelectUser }: Props) {
               class="mb-2 w-full rounded-full bg-slate-100 px-3 py-1.5 text-sm outline-none focus:bg-slate-200"
             />
             <ul class="overflow-y-auto">
-              {filteredUsers.map((name) => (
+              {displayUsers.map((name) => (
                 <li key={name}>
                   <button
                     type="button"
@@ -71,14 +76,26 @@ export function SideMenu({ open, onClose, users, onSelectUser }: Props) {
                     onClick={() => onSelectUser(name)}
                   >
                     <ProfileAvatar username={name} />
-                    <span class="ml-2 truncate text-base text-slate-800">
+                    {name === owner && (
+                      <span
+                        aria-label="me"
+                        class="ml-2 inline-flex h-6 w-6 items-center justify-center rounded-full bg-slate-700 text-[9px] font-semibold leading-none text-white"
+                      >
+                        me
+                      </span>
+                    )}
+                    <span
+                      class={`${
+                        name === owner ? "ml-1.5" : "ml-2"
+                      } truncate text-base text-slate-800`}
+                    >
                       {name}
                     </span>
                   </button>
                 </li>
               ))}
             </ul>
-            {filteredUsers.length === 0 && (
+            {displayUsers.length === 0 && (
               <p class="py-4 text-center text-sm text-slate-500">
                 일치하는 참여자가 없습니다.
               </p>

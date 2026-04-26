@@ -306,6 +306,7 @@ export function App() {
           open={menuOpen}
           onClose={() => setMenuOpen(false)}
           users={chat.users}
+          owner={owner}
           onSelectUser={handleSelectUser}
         />
         {datePickerOpen && (

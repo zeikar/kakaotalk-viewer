@@ -92,6 +92,41 @@ describe("SideMenu", () => {
     expect(items[2]).toHaveTextContent("테스트");
   });
 
+  test("renders the selected owner at the top of the participant list", () => {
+    render(
+      <SideMenu
+        open={true}
+        onClose={() => {}}
+        users={["나", "수아", "테스트"]}
+        owner="테스트"
+        onSelectUser={() => {}}
+      />
+    );
+
+    const items = screen.getAllByRole("listitem");
+    expect(items[0]).toHaveTextContent("테스트");
+    expect(items[1]).toHaveTextContent("나");
+    expect(items[2]).toHaveTextContent("수아");
+  });
+
+  test("renders a me chip only for the selected owner", () => {
+    render(
+      <SideMenu
+        open={true}
+        onClose={() => {}}
+        users={["나", "수아", "테스트"]}
+        owner="수아"
+        onSelectUser={() => {}}
+      />
+    );
+
+    const items = screen.getAllByRole("listitem");
+    expect(screen.getByLabelText("me")).toBeInTheDocument();
+    expect(items[0]).toHaveTextContent("수아");
+    expect(items[1]).not.toHaveTextContent("me");
+    expect(items[2]).not.toHaveTextContent("me");
+  });
+
   test("hides the participants section when users is empty", () => {
     render(
       <SideMenu
@@ -135,6 +170,27 @@ describe("SideMenu", () => {
     expect(screen.getAllByRole("listitem")).toHaveLength(1);
     expect(screen.getByRole("button", { name: /수아/ })).toBeInTheDocument();
     expect(screen.queryByText("나")).not.toBeInTheDocument();
+  });
+
+  test("keeps the selected owner first within participant search results", () => {
+    render(
+      <SideMenu
+        open={true}
+        onClose={() => {}}
+        users={["테스트1", "수아", "테스트2"]}
+        owner="테스트2"
+        onSelectUser={() => {}}
+      />
+    );
+
+    fireEvent.input(screen.getByRole("searchbox", { name: "참여자 검색" }), {
+      target: { value: "테스트" },
+    });
+
+    const items = screen.getAllByRole("listitem");
+    expect(items).toHaveLength(2);
+    expect(items[0]).toHaveTextContent("테스트2");
+    expect(items[1]).toHaveTextContent("테스트1");
   });
 
   test("shows an empty state when participant search has no matches", () => {
