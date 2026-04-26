@@ -63,7 +63,7 @@ export function MessageRow({
           <button
             type="button"
             aria-label={`${displayName} 메시지 필터`}
-            class="group cursor-pointer focus:outline-none"
+            class="group self-start flex-shrink-0 cursor-pointer focus:outline-none"
             onClick={() => onSelectUser(username)}
           >
             <ProfileAvatar username={displayName} interactive />
