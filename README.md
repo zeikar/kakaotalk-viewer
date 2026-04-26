@@ -1,6 +1,6 @@
 # KakaoTalk Viewer
 
-KakaoTalk chat viewer. 카카오톡 내보내기 뷰어.
+KakaoTalk viewer. 카카오톡 내보내기 뷰어.
 
 카카오톡 대화 내보내기 파일을 브라우저에서 바로 열어볼 수 있는 오픈소스 카카오톡 채팅 뷰어입니다. Windows, macOS, Android, iOS에서 내보낸 카카오톡 대화 파일을 읽고, 실제 메신저처럼 날짜별로 정리된 메시지를 검색하고 탐색할 수 있습니다.
 

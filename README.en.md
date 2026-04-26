@@ -1,6 +1,6 @@
 # KakaoTalk Viewer
 
-KakaoTalk chat viewer. 카카오톡 내보내기 뷰어.
+KakaoTalk viewer. 카카오톡 내보내기 뷰어.
 
 KakaoTalk Viewer is an open-source KakaoTalk chat export viewer. Open your exported KakaoTalk chat file in the browser, browse long conversations smoothly, search messages, and jump by date without installing a desktop app.
 
