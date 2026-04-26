@@ -6,31 +6,16 @@ import { MessageList } from "./components/message-list";
 import { Reply } from "./components/reply";
 import { SearchBar } from "./components/search-bar";
 import { SideMenu } from "./components/side-menu";
+import { useSearchNavigation } from "./hooks/use-search-navigation";
 import { buildDateIndex } from "./lib/date-index";
 import { pickVisibleDateIndex } from "./lib/visible-date";
 import { readFile } from "./lib/read-file";
 import { formatDateKorean, getCurrentDate, getCurrentTime } from "./lib/format";
-import { findMatches } from "./lib/search";
 import { parseKakaoTalkText } from "./parser";
 import { createTutorialChat } from "./tutorial";
 import type { Chat } from "./types";
 
 const SYSTEM_USER = "카카오톡 뷰어";
-
-function findNearestMatchPosition(matches: number[], anchorIndex: number): number {
-  if (matches.length === 0) return 0;
-
-  let nearestPosition = 0;
-  let nearestDistance = Math.abs(matches[0] - anchorIndex);
-  for (let i = 1; i < matches.length; i++) {
-    const distance = Math.abs(matches[i] - anchorIndex);
-    if (distance < nearestDistance) {
-      nearestPosition = i;
-      nearestDistance = distance;
-    }
-  }
-  return nearestPosition;
-}
 
 export function App() {
   const [chat, setChat] = useState<Chat>(() => createTutorialChat());
@@ -40,25 +25,39 @@ export function App() {
   // Bumped on each chat replacement to remount the Virtuoso list and start
   // scroll position at the latest message.
   const [chatKey, setChatKey] = useState(0);
-  const [searchOpen, setSearchOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [userFilter, setUserFilter] = useState<string | null>(null);
-  const [currentMatchIdx, setCurrentMatchIdx] = useState(0);
   const [datePickerOpen, setDatePickerOpen] = useState(false);
   const [datePickerInitialDate, setDatePickerInitialDate] = useState<
     string | null
   >(null);
   const virtuosoRef = useRef<VirtuosoHandle>(null);
   const visibleStartRef = useRef(0);
-  const pendingUserFilterMatchIdxRef = useRef<number | null>(null);
   const scrollPillTimerRef = useRef<number | null>(null);
   const [scrollingDate, setScrollingDate] = useState<string | null>(null);
   const [scrollProgress, setScrollProgress] = useState(1);
 
-  const matches = useMemo(
-    () => findMatches(chat.messages, searchQuery, userFilter),
-    [chat.messages, searchQuery, userFilter]
-  );
+  const scrollToMessage = useCallback((index: number) => {
+    virtuosoRef.current?.scrollToIndex({ index, align: "center" });
+  }, []);
+
+  const {
+    searchOpen,
+    searchQuery,
+    userFilter,
+    currentMatchIdx,
+    matches,
+    setSearchQuery,
+    openSearch,
+    toggleSearch,
+    closeSearch,
+    clearUserFilter,
+    handleNext,
+    handlePrev,
+    selectUser,
+    selectUserFromMessage,
+  } = useSearchNavigation({
+    messages: chat.messages,
+    scrollToIndex: scrollToMessage,
+  });
 
   const dateIndex = useMemo(
     () => buildDateIndex(chat.messages),
@@ -72,13 +71,6 @@ export function App() {
     const lastDate = chat.messages[chat.messages.length - 1].date;
     return dateIndex.get(lastDate) ?? null;
   }, [chat.messages, dateIndex]);
-
-  const closeSearch = useCallback(() => {
-    setSearchOpen(false);
-    setSearchQuery("");
-    setUserFilter(null);
-    setCurrentMatchIdx(0);
-  }, []);
 
   const closeDatePicker = useCallback(() => {
     setDatePickerOpen(false);
@@ -139,24 +131,10 @@ export function App() {
   }, [chatKey]);
 
   useEffect(() => {
-    const pendingMatchIdx = pendingUserFilterMatchIdxRef.current;
-    pendingUserFilterMatchIdxRef.current = null;
-    setCurrentMatchIdx(pendingMatchIdx ?? 0);
-  }, [searchQuery, userFilter]);
-
-  useEffect(() => {
-    if (matches.length === 0) return;
-    virtuosoRef.current?.scrollToIndex({
-      index: matches[currentMatchIdx],
-      align: "center",
-    });
-  }, [matches, currentMatchIdx]);
-
-  useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key === "f") {
         e.preventDefault();
-        setSearchOpen(true);
+        openSearch();
       } else if (e.key === "Escape") {
         if (datePickerOpen) {
           e.preventDefault();
@@ -169,37 +147,22 @@ export function App() {
     };
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [searchOpen, datePickerOpen, closeSearch, closeDatePicker]);
+  }, [searchOpen, datePickerOpen, openSearch, closeSearch, closeDatePicker]);
 
-  const handleNext = useCallback(() => {
-    setCurrentMatchIdx((i) => (matches.length === 0 ? 0 : (i + 1) % matches.length));
-  }, [matches.length]);
-
-  const handlePrev = useCallback(() => {
-    setCurrentMatchIdx((i) =>
-      matches.length === 0 ? 0 : (i - 1 + matches.length) % matches.length
-    );
-  }, [matches.length]);
-
-  const handleSelectUser = useCallback((username: string) => {
-    pendingUserFilterMatchIdxRef.current = null;
-    setUserFilter(username);
-    setSearchOpen(true);
-    setMenuOpen(false);
-    setCurrentMatchIdx(0);
-  }, []);
+  const handleSelectUser = useCallback(
+    (username: string) => {
+      selectUser(username);
+      setMenuOpen(false);
+    },
+    [selectUser]
+  );
 
   const handleSelectUserFromMessage = useCallback(
     (username: string, messageIndex: number) => {
-      const nextMatches = findMatches(chat.messages, searchQuery, username);
-      const nextMatchIdx = findNearestMatchPosition(nextMatches, messageIndex);
-      pendingUserFilterMatchIdxRef.current = nextMatchIdx;
-      setUserFilter(username);
-      setSearchOpen(true);
+      selectUserFromMessage(username, messageIndex);
       setMenuOpen(false);
-      setCurrentMatchIdx(nextMatchIdx);
     },
-    [chat.messages, searchQuery]
+    [selectUserFromMessage]
   );
 
   const appendSystemMessage = useCallback((text: string) => {
@@ -283,7 +246,7 @@ export function App() {
         <Header
           title={`${chat.roomName} (${chat.users.length})`}
           onOpenMenu={() => setMenuOpen(true)}
-          onToggleSearch={() => setSearchOpen((v) => !v)}
+          onToggleSearch={toggleSearch}
           onToggleDatePicker={() => {
             if (datePickerOpen) closeDatePicker();
             else {
@@ -302,7 +265,7 @@ export function App() {
             onPrev={handlePrev}
             onClose={closeSearch}
             userFilter={userFilter}
-            onClearUserFilter={() => setUserFilter(null)}
+            onClearUserFilter={clearUserFilter}
           />
         )}
         <div class="relative flex flex-col flex-1 min-h-0 min-w-0">
