@@ -204,6 +204,7 @@ export function App() {
   const handleFile = useCallback(
     async (file: File) => {
       // Reset to tutorial baseline so re-uploads don't pile up.
+      closeSearch();
       setChat(createTutorialChat());
       setOwner(null);
       setPendingChat(null);
@@ -230,7 +231,7 @@ export function App() {
       appendSelectMessage(parsed.users);
       setPendingChat(parsed);
     },
-    [appendSystemMessage, appendSelectMessage]
+    [appendSystemMessage, appendSelectMessage, closeSearch]
   );
 
   const handleSelectOwner = useCallback(
