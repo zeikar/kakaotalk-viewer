@@ -76,7 +76,7 @@ export function MessageRow({
           <ProfileAvatarPlaceholder />
         ))}
 
-      <div class="flex flex-col max-w-[calc(80%-3rem)] min-w-0">
+      <div class="flex flex-col max-w-[calc(100%-9rem)] min-w-0">
         {!isMine && isFirst && (
           <button
             type="button"

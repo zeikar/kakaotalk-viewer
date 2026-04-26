@@ -16,6 +16,8 @@ import { createTutorialChat } from "./tutorial";
 import type { Chat } from "./types";
 
 const SYSTEM_USER = "카카오톡 뷰어";
+const DEFAULT_CHAT_WIDTH = 480;
+const MIN_CHAT_WIDTH = 400;
 
 export function App() {
   const [chat, setChat] = useState<Chat>(() => createTutorialChat());
@@ -35,6 +37,34 @@ export function App() {
   const scrollPillTimerRef = useRef<number | null>(null);
   const [scrollingDate, setScrollingDate] = useState<string | null>(null);
   const [scrollProgress, setScrollProgress] = useState(1);
+  const [chatWidth, setChatWidth] = useState(DEFAULT_CHAT_WIDTH);
+
+  const startResize = useCallback(
+    (side: "left" | "right") => (e: PointerEvent) => {
+      e.preventDefault();
+      const startX = e.clientX;
+      const startWidth = chatWidth;
+      const sign = side === "right" ? 1 : -1;
+
+      const onMove = (ev: PointerEvent) => {
+        const dx = ev.clientX - startX;
+        // Layout is centered, so each edge moves by half the width delta.
+        // Doubling keeps the dragged edge under the cursor.
+        const next = startWidth + dx * sign * 2;
+        const max = window.innerWidth;
+        setChatWidth(Math.max(MIN_CHAT_WIDTH, Math.min(max, next)));
+      };
+
+      const onUp = () => {
+        window.removeEventListener("pointermove", onMove);
+        window.removeEventListener("pointerup", onUp);
+      };
+
+      window.addEventListener("pointermove", onMove);
+      window.addEventListener("pointerup", onUp);
+    },
+    [chatWidth]
+  );
 
   const scrollToMessage = useCallback((index: number) => {
     virtuosoRef.current?.scrollToIndex({ index, align: "center" });
@@ -260,7 +290,22 @@ export function App() {
 
   return (
     <div class="h-screen flex justify-center bg-slate-700">
-      <div class="relative flex flex-col w-full max-w-[480px] h-screen bg-kakao-bg shadow-xl overflow-hidden">
+      <div
+        class="relative flex flex-col w-full h-screen bg-kakao-bg shadow-xl overflow-hidden"
+        style={{ maxWidth: `${chatWidth}px` }}
+      >
+        <div
+          class="absolute top-0 left-0 z-20 h-full w-1.5 cursor-ew-resize bg-transparent hover:bg-white/20 transition-colors"
+          onPointerDown={startResize("left")}
+          aria-label="채팅창 너비 조절"
+          role="separator"
+        />
+        <div
+          class="absolute top-0 right-0 z-20 h-full w-1.5 cursor-ew-resize bg-transparent hover:bg-white/20 transition-colors"
+          onPointerDown={startResize("right")}
+          aria-label="채팅창 너비 조절"
+          role="separator"
+        />
         <Header
           title={`${chat.roomName} (${chat.users.length})`}
           onBack={hasUploaded ? handleReset : undefined}
