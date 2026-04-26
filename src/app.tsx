@@ -272,6 +272,7 @@ export function App() {
           <MessageList
             key={chatKey}
             messages={chat.messages}
+            users={chat.users}
             owner={owner}
             onSelectOwner={handleSelectOwner}
             onSelectUser={handleSelectUserFromMessage}

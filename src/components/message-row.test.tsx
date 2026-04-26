@@ -13,6 +13,7 @@ const plain = (overrides: Partial<Extract<Message, { kind: "plain" }>> = {}): Me
 });
 
 const baseProps = {
+  users: ["alice"],
   isMine: false,
   isFirst: true,
   isLast: true,
@@ -145,5 +146,39 @@ describe("MessageRow", () => {
     expect(onSelectUser).toHaveBeenCalledTimes(2);
     expect(onSelectUser).toHaveBeenNthCalledWith(1, "alice");
     expect(onSelectUser).toHaveBeenNthCalledWith(2, "alice");
+  });
+
+  test("clicking a mention in a message forwards onSelectUser", () => {
+    const onSelectUser = vi.fn();
+    render(
+      <MessageRow
+        {...baseProps}
+        onSelectUser={onSelectUser}
+        message={plain({ text: "hello @alice" })}
+      />
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: "@alice" }));
+
+    expect(onSelectUser).toHaveBeenCalledWith("alice");
+  });
+
+  test("clicking a username in a notification forwards onSelectUser", () => {
+    const onSelectUser = vi.fn();
+    render(
+      <MessageRow
+        {...baseProps}
+        onSelectUser={onSelectUser}
+        message={{
+          kind: "notification",
+          date: "2024-01-01",
+          text: "alice joined this chatroom.",
+        }}
+      />
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: "alice" }));
+
+    expect(onSelectUser).toHaveBeenCalledWith("alice");
   });
 });

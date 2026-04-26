@@ -1,5 +1,5 @@
-import { describe, expect, test } from "vitest";
-import { render, screen } from "@testing-library/preact";
+import { describe, expect, test, vi } from "vitest";
+import { fireEvent, render, screen } from "@testing-library/preact";
 import { PlainMessageBody } from "./plain-message-body";
 
 describe("PlainMessageBody", () => {
@@ -51,5 +51,40 @@ describe("PlainMessageBody", () => {
     );
     const mark = container.querySelector("mark");
     expect(mark).toHaveTextContent("Hello");
+  });
+
+  test("renders @username mentions as clickable blue buttons", () => {
+    const onSelectUser = vi.fn();
+    render(
+      <PlainMessageBody
+        text="안녕 @수아"
+        searchQuery=""
+        users={["수아"]}
+        onSelectUser={onSelectUser}
+      />
+    );
+
+    const mention = screen.getByRole("button", { name: "@수아" });
+    expect(mention).toHaveClass("text-blue-700");
+
+    fireEvent.click(mention);
+
+    expect(onSelectUser).toHaveBeenCalledWith("수아");
+  });
+
+  test("supports braced mentions for names with spaces", () => {
+    const onSelectUser = vi.fn();
+    render(
+      <PlainMessageBody
+        text="안녕 @{수아 친구}"
+        searchQuery=""
+        users={["수아 친구"]}
+        onSelectUser={onSelectUser}
+      />
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: "@{수아 친구}" }));
+
+    expect(onSelectUser).toHaveBeenCalledWith("수아 친구");
   });
 });

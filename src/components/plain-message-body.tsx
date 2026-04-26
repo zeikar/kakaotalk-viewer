@@ -1,12 +1,19 @@
-import { splitByQuery } from "../lib/search";
 import { splitByUrls } from "../lib/url";
+import { SelectableUserText, renderHighlighted } from "./selectable-user-text";
 
 interface Props {
   text: string;
   searchQuery: string;
+  users?: string[];
+  onSelectUser?: (username: string) => void;
 }
 
-export function PlainMessageBody({ text, searchQuery }: Props) {
+export function PlainMessageBody({
+  text,
+  searchQuery,
+  users = [],
+  onSelectUser,
+}: Props) {
   const segments = splitByUrls(text);
 
   return (
@@ -23,21 +30,21 @@ export function PlainMessageBody({ text, searchQuery }: Props) {
             {renderHighlighted(seg.value, searchQuery)}
           </a>
         ) : (
-          <span key={i}>{renderHighlighted(seg.value, searchQuery)}</span>
+          <span key={i}>
+            {onSelectUser ? (
+              <SelectableUserText
+                text={seg.value}
+                searchQuery={searchQuery}
+                users={users}
+                mode="mention"
+                onSelectUser={onSelectUser}
+              />
+            ) : (
+              renderHighlighted(seg.value, searchQuery)
+            )}
+          </span>
         )
       )}
     </span>
-  );
-}
-
-function renderHighlighted(text: string, query: string) {
-  return splitByQuery(text, query).map((part, i) =>
-    part.match ? (
-      <mark key={i} class="bg-blue-200 text-inherit rounded-sm">
-        {part.text}
-      </mark>
-    ) : (
-      <span key={i}>{part.text}</span>
-    )
   );
 }

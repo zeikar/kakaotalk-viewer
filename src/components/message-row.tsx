@@ -7,6 +7,7 @@ import { SelectMessageBody } from "./select-message-body";
 
 interface Props {
   message: Message;
+  users: string[];
   isMine: boolean;
   isFirst: boolean;
   isLast: boolean;
@@ -19,6 +20,7 @@ interface Props {
 
 export function MessageRow({
   message,
+  users,
   isMine,
   isFirst,
   isLast,
@@ -40,6 +42,8 @@ export function MessageRow({
         text={message.text}
         searchQuery={searchQuery}
         isCurrentMatch={isCurrentMatch}
+        users={users}
+        onSelectUser={onSelectUser}
       />
     );
   }
@@ -88,7 +92,12 @@ export function MessageRow({
             class={`${bubbleColor} ${tail} ${bubbleGutter} ${currentRing} rounded-2xl px-3.5 py-2.5 text-base shadow-sm`}
           >
             {message.kind === "plain" ? (
-              <PlainMessageBody text={message.text} searchQuery={searchQuery} />
+              <PlainMessageBody
+                text={message.text}
+                searchQuery={searchQuery}
+                users={users}
+                onSelectUser={onSelectUser}
+              />
             ) : (
               <SelectMessageBody
                 options={message.options}

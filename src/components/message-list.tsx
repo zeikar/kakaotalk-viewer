@@ -5,6 +5,7 @@ import { MessageRow } from "./message-row";
 
 interface Props {
   messages: Message[];
+  users: string[];
   owner: string | null;
   onSelectOwner: (username: string) => void;
   onSelectUser: (username: string, messageIndex: number) => void;
@@ -19,6 +20,7 @@ interface Props {
 
 export function MessageList({
   messages,
+  users,
   owner,
   onSelectOwner,
   onSelectUser,
@@ -49,6 +51,7 @@ export function MessageList({
       itemContent={(index, msg) => (
         <MessageRow
           message={msg}
+          users={users}
           isMine={msg.kind === "plain" && msg.username === owner}
           isFirst={isFirstOfGroup(messages, index)}
           isLast={isLastOfGroup(messages, index)}
