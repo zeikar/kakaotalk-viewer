@@ -117,4 +117,68 @@ describe("SideMenu", () => {
     fireEvent.click(screen.getByRole("button", { name: /수아/ }));
     expect(onSelectUser).toHaveBeenCalledWith("수아");
   });
+
+  test("filters participants by search input", () => {
+    render(
+      <SideMenu
+        open={true}
+        onClose={() => {}}
+        users={["나", "수아", "테스트"]}
+        onSelectUser={() => {}}
+      />
+    );
+
+    fireEvent.input(screen.getByRole("searchbox", { name: "참여자 검색" }), {
+      target: { value: "수" },
+    });
+
+    expect(screen.getAllByRole("listitem")).toHaveLength(1);
+    expect(screen.getByRole("button", { name: /수아/ })).toBeInTheDocument();
+    expect(screen.queryByText("나")).not.toBeInTheDocument();
+  });
+
+  test("shows an empty state when participant search has no matches", () => {
+    render(
+      <SideMenu
+        open={true}
+        onClose={() => {}}
+        users={["나", "수아"]}
+        onSelectUser={() => {}}
+      />
+    );
+
+    fireEvent.input(screen.getByRole("searchbox", { name: "참여자 검색" }), {
+      target: { value: "테스트" },
+    });
+
+    expect(screen.queryAllByRole("listitem")).toHaveLength(0);
+    expect(screen.getByText("일치하는 참여자가 없습니다.")).toBeInTheDocument();
+  });
+
+  test("clears participant search when the menu closes", () => {
+    const { rerender } = render(
+      <SideMenu
+        open={true}
+        onClose={() => {}}
+        users={["나", "수아"]}
+        onSelectUser={() => {}}
+      />
+    );
+
+    const input = screen.getByRole("searchbox", {
+      name: "참여자 검색",
+    }) as HTMLInputElement;
+    fireEvent.input(input, { target: { value: "수" } });
+
+    rerender(
+      <SideMenu
+        open={false}
+        onClose={() => {}}
+        users={["나", "수아"]}
+        onSelectUser={() => {}}
+      />
+    );
+
+    expect(input.value).toBe("");
+  });
 });

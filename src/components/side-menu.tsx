@@ -1,3 +1,4 @@
+import { useEffect, useState } from "preact/hooks";
 import { ArrowTopRightOnSquareIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { ProfileAvatar } from "./profile-avatar";
 
@@ -9,6 +10,17 @@ interface Props {
 }
 
 export function SideMenu({ open, onClose, users, onSelectUser }: Props) {
+  const [userQuery, setUserQuery] = useState("");
+  const normalizedQuery = userQuery.trim().toLowerCase();
+  const filteredUsers =
+    normalizedQuery.length === 0
+      ? users
+      : users.filter((name) => name.toLowerCase().includes(normalizedQuery));
+
+  useEffect(() => {
+    if (!open) setUserQuery("");
+  }, [open]);
+
   return (
     <>
       <div
@@ -42,8 +54,16 @@ export function SideMenu({ open, onClose, users, onSelectUser }: Props) {
             <h3 class="text-sm font-semibold text-slate-600 mb-2">
               참여자 ({users.length})
             </h3>
+            <input
+              type="search"
+              value={userQuery}
+              aria-label="참여자 검색"
+              placeholder="참여자 검색"
+              onInput={(e) => setUserQuery((e.target as HTMLInputElement).value)}
+              class="mb-2 w-full rounded-full bg-slate-100 px-3 py-1.5 text-sm outline-none focus:bg-slate-200"
+            />
             <ul class="overflow-y-auto">
-              {users.map((name) => (
+              {filteredUsers.map((name) => (
                 <li key={name}>
                   <button
                     type="button"
@@ -58,6 +78,11 @@ export function SideMenu({ open, onClose, users, onSelectUser }: Props) {
                 </li>
               ))}
             </ul>
+            {filteredUsers.length === 0 && (
+              <p class="py-4 text-center text-sm text-slate-500">
+                일치하는 참여자가 없습니다.
+              </p>
+            )}
           </section>
         )}
 
