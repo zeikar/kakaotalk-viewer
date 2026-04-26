@@ -26,7 +26,11 @@ export function Reply({ onFile }: Props) {
           class="block w-full text-sm border rounded-full px-4 py-3 file:mr-3 file:rounded-full file:border-0 file:bg-kakao-bg file:px-3 file:py-1 file:text-white"
           onChange={(e) => {
             const input = e.target as HTMLInputElement;
-            if (input.files && input.files[0]) onFile(input.files[0]);
+            const file = input.files?.[0];
+            // Clear so the same file can be picked again — browsers skip the
+            // change event if the selected path is identical to the previous.
+            input.value = "";
+            if (file) onFile(file);
           }}
         />
       </label>

@@ -9,6 +9,7 @@ import {
 
 interface Props {
   title: string;
+  onBack?: () => void;
   onOpenMenu: () => void;
   onToggleSearch: () => void;
   onToggleDatePicker: () => void;
@@ -16,6 +17,7 @@ interface Props {
 
 export function Header({
   title,
+  onBack,
   onOpenMenu,
   onToggleSearch,
   onToggleDatePicker,
@@ -23,7 +25,16 @@ export function Header({
   return (
     <header class="bg-kakao-bg grid grid-cols-[3rem,minmax(0,1fr),6.5rem] items-center px-3 h-[50px] flex-shrink-0">
       <div class="flex items-center justify-start">
-        <ArrowLeftIcon className="h-6 w-6" aria-hidden="true" />
+        {onBack && (
+          <button
+            type="button"
+            aria-label="뒤로 가기"
+            onClick={onBack}
+            class="flex h-8 w-8 items-center justify-center cursor-pointer"
+          >
+            <ArrowLeftIcon className="h-6 w-6" aria-hidden="true" />
+          </button>
+        )}
       </div>
       <h1 class="min-w-0 text-lg font-semibold truncate text-center">{title}</h1>
       <div class="flex items-center justify-end gap-1">

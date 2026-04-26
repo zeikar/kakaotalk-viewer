@@ -21,6 +21,7 @@ export function App() {
   const [chat, setChat] = useState<Chat>(() => createTutorialChat());
   const [owner, setOwner] = useState<string | null>(null);
   const [pendingChat, setPendingChat] = useState<Chat | null>(null);
+  const [hasUploaded, setHasUploaded] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   // Bumped on each chat replacement to remount the Virtuoso list and start
   // scroll position at the latest message.
@@ -197,14 +198,31 @@ export function App() {
     }));
   }, []);
 
+  const handleReset = useCallback(() => {
+    closeSearch();
+    closeDatePicker();
+    setMenuOpen(false);
+    setChat(createTutorialChat());
+    setOwner(null);
+    setPendingChat(null);
+    setHasUploaded(false);
+    setChatKey((k) => k + 1);
+  }, [closeSearch, closeDatePicker]);
+
   const handleFile = useCallback(
     async (file: File) => {
-      // Reset to tutorial baseline so re-uploads don't pile up.
       closeSearch();
-      setChat(createTutorialChat());
-      setOwner(null);
-      setPendingChat(null);
-      setChatKey((k) => k + 1);
+
+      // On re-upload, reset to tutorial baseline so previous load's messages
+      // don't pile up. On the very first upload from pristine tutorial, skip
+      // the reset and just append — avoids a Virtuoso remount flicker.
+      if (hasUploaded) {
+        setChat(createTutorialChat());
+        setOwner(null);
+        setPendingChat(null);
+        setChatKey((k) => k + 1);
+      }
+      setHasUploaded(true);
 
       appendSystemMessage(
         `${file.name} 파일을 읽는 중입니다... 잠시만 기다려 주세요`
@@ -227,7 +245,7 @@ export function App() {
       appendSelectMessage(parsed.users);
       setPendingChat(parsed);
     },
-    [appendSystemMessage, appendSelectMessage, closeSearch]
+    [appendSystemMessage, appendSelectMessage, closeSearch, hasUploaded]
   );
 
   const handleSelectOwner = useCallback(
@@ -245,6 +263,7 @@ export function App() {
       <div class="relative flex flex-col w-full max-w-[480px] h-screen bg-kakao-bg shadow-xl overflow-hidden">
         <Header
           title={`${chat.roomName} (${chat.users.length})`}
+          onBack={hasUploaded ? handleReset : undefined}
           onOpenMenu={() => setMenuOpen(true)}
           onToggleSearch={toggleSearch}
           onToggleDatePicker={() => {

@@ -20,6 +20,15 @@ describe("Reply", () => {
     expect(onFile).not.toHaveBeenCalled();
   });
 
+  test("clears the input after a file is picked so the same file can be picked again", () => {
+    const onFile = vi.fn();
+    const { container } = render(<Reply onFile={onFile} />);
+    const input = container.querySelector("input[type='file']") as HTMLInputElement;
+    const file = new File(["chat"], "chat.txt", { type: "text/plain" });
+    fireEvent.change(input, { target: { files: [file] } });
+    expect(input.value).toBe("");
+  });
+
   test("opens the file picker from the plus button", () => {
     const onFile = vi.fn();
     const { container } = render(<Reply onFile={onFile} />);

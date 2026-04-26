@@ -56,4 +56,31 @@ describe("Header", () => {
     fireEvent.click(screen.getByRole("button", { name: "날짜로 이동" }));
     expect(onToggleDatePicker).toHaveBeenCalledTimes(1);
   });
+
+  test("does not render the back button when onBack is omitted", () => {
+    render(
+      <Header
+        title="t"
+        onOpenMenu={() => {}}
+        onToggleSearch={() => {}}
+        onToggleDatePicker={() => {}}
+      />
+    );
+    expect(screen.queryByRole("button", { name: "뒤로 가기" })).toBeNull();
+  });
+
+  test("fires onBack when the back button is clicked", () => {
+    const onBack = vi.fn();
+    render(
+      <Header
+        title="t"
+        onBack={onBack}
+        onOpenMenu={() => {}}
+        onToggleSearch={() => {}}
+        onToggleDatePicker={() => {}}
+      />
+    );
+    fireEvent.click(screen.getByRole("button", { name: "뒤로 가기" }));
+    expect(onBack).toHaveBeenCalledTimes(1);
+  });
 });
