@@ -12,7 +12,11 @@ const SYSTEM_MESSAGE_PATTERNS = [
     toText: (match: RegExpMatchArray) => match[0],
   },
   {
-    pattern: /^.+ left this chatroom\.$/,
+    pattern: /^.+ (joined|left) this chatroom\.$/,
+    toText: (match: RegExpMatchArray) => match[0],
+  },
+  {
+    pattern: /^.+ has been removed from this chatroom\.$/,
     toText: (match: RegExpMatchArray) => match[0],
   },
 ];

@@ -19,6 +19,8 @@ describe("parseMac", () => {
 2021-12-29 20:38:00,"테스트","테스트 invited 나 and."
 2021-12-29 20:39:00,"나","나님이 나갔습니다."
 2021-12-29 20:40:00,"Stewie","Stewie left this chatroom."
+2021-12-29 20:40:30,"테스트","테스트 joined this chatroom."
+2021-12-29 20:40:45,"나","수아 has been removed from this chatroom."
 2021-12-29 20:41:00,"테스트","다시 말함"
 2021-12-30 01:02:00,"수아","다음날 메시지"
 `);
@@ -66,6 +68,16 @@ describe("parseMac", () => {
           kind: "notification",
           date: "2021-12-29",
           text: "Stewie left this chatroom.",
+        },
+        {
+          kind: "notification",
+          date: "2021-12-29",
+          text: "테스트 joined this chatroom.",
+        },
+        {
+          kind: "notification",
+          date: "2021-12-29",
+          text: "수아 has been removed from this chatroom.",
         },
         {
           kind: "plain",
