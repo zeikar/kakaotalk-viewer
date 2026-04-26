@@ -17,7 +17,7 @@ KakaoTalk Viewer is an open-source KakaoTalk chat export viewer. Open your expor
 - Automatically detects Windows, macOS, Android, and iOS KakaoTalk exports.
 - Renders `.txt` and `.csv` chat files directly in the browser.
 - Supports Korean exports and known English date/system-message patterns.
-- Search messages and jump by date, oldest, or latest.
+- Search messages, filter by user, and jump by date, oldest, or latest.
 - Separates your messages from others after owner selection.
 - Keeps long chat histories responsive with virtual scrolling.
 - Displays date headers, invite/leave notifications, multiline messages, and links.

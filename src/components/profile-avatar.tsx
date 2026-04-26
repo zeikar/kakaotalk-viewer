@@ -8,9 +8,10 @@ const SQUIRCLE_PATH =
 
 interface Props {
   username: string;
+  interactive?: boolean;
 }
 
-export function ProfileAvatar({ username }: Props) {
+export function ProfileAvatar({ username, interactive = false }: Props) {
   const fill = generateColorByUserName(username);
   const textColor = getTextColorByBackgroundColor(fill);
   const initials = username.slice(0, 3).toUpperCase();
@@ -18,7 +19,15 @@ export function ProfileAvatar({ username }: Props) {
   return (
     <div class="w-[50px] m-[5px] flex-shrink-0">
       <svg viewBox="0 0 50 50">
-        <path d={SQUIRCLE_PATH} fill={fill} />
+        <path
+          d={SQUIRCLE_PATH}
+          fill={fill}
+          class={
+            interactive
+              ? "transition-opacity group-hover:opacity-80 group-focus:opacity-80"
+              : ""
+          }
+        />
         <text
           x="50%"
           y="50%"

@@ -7,6 +7,7 @@ interface Props {
   messages: Message[];
   owner: string | null;
   onSelectOwner: (username: string) => void;
+  onSelectUser: (username: string) => void;
   virtuosoRef?: Ref<VirtuosoHandle>;
   searchQuery: string;
   currentMatchMessageIndex: number | null;
@@ -20,6 +21,7 @@ export function MessageList({
   messages,
   owner,
   onSelectOwner,
+  onSelectUser,
   virtuosoRef,
   searchQuery,
   currentMatchMessageIndex,
@@ -51,6 +53,7 @@ export function MessageList({
           isFirst={isFirstOfGroup(messages, index)}
           isLast={isLastOfGroup(messages, index)}
           onSelectOwner={onSelectOwner}
+          onSelectUser={onSelectUser}
           searchQuery={searchQuery}
           isCurrentMatch={index === currentMatchMessageIndex}
           onDateHeaderClick={onDateHeaderClick}

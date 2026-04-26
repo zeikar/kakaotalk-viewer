@@ -11,6 +11,7 @@ interface Props {
   isFirst: boolean;
   isLast: boolean;
   onSelectOwner: (username: string) => void;
+  onSelectUser: (username: string) => void;
   searchQuery: string;
   isCurrentMatch: boolean;
   onDateHeaderClick?: (date: string) => void;
@@ -22,6 +23,7 @@ export function MessageRow({
   isFirst,
   isLast,
   onSelectOwner,
+  onSelectUser,
   searchQuery,
   isCurrentMatch,
   onDateHeaderClick,
@@ -58,14 +60,27 @@ export function MessageRow({
     <div class={`flex w-full px-2 ${rowPadBottom} ${rowDir}`}>
       {!isMine &&
         (isFirst ? (
-          <ProfileAvatar username={displayName} />
+          <button
+            type="button"
+            aria-label={`${displayName} 메시지 필터`}
+            class="group cursor-pointer focus:outline-none"
+            onClick={() => onSelectUser(username)}
+          >
+            <ProfileAvatar username={displayName} interactive />
+          </button>
         ) : (
           <ProfileAvatarPlaceholder />
         ))}
 
       <div class="flex flex-col max-w-[calc(80%-3rem)] min-w-0">
         {!isMine && isFirst && (
-          <div class="text-sm opacity-80 ml-2 mb-1">{displayName}</div>
+          <button
+            type="button"
+            class="ml-2 mb-1 w-fit max-w-full truncate text-left text-sm opacity-80 cursor-pointer hover:underline focus:outline-none focus:underline"
+            onClick={() => onSelectUser(username)}
+          >
+            {displayName}
+          </button>
         )}
 
         <div class="relative flex items-end min-w-0 w-fit">

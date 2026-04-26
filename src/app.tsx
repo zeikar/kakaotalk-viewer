@@ -277,6 +277,7 @@ export function App() {
             messages={chat.messages}
             owner={owner}
             onSelectOwner={handleSelectOwner}
+            onSelectUser={handleSelectUser}
             virtuosoRef={virtuosoRef}
             searchQuery={searchOpen ? searchQuery : ""}
             currentMatchMessageIndex={

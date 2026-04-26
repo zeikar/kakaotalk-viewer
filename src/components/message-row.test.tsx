@@ -17,6 +17,7 @@ const baseProps = {
   isFirst: true,
   isLast: true,
   onSelectOwner: () => {},
+  onSelectUser: () => {},
   searchQuery: "",
   isCurrentMatch: false,
 };
@@ -126,5 +127,23 @@ describe("MessageRow", () => {
     const select = screen.getByRole("combobox") as HTMLSelectElement;
     fireEvent.change(select, { target: { value: "bob" } });
     expect(onSelectOwner).toHaveBeenCalledWith("bob");
+  });
+
+  test("clicking another user's name or avatar forwards onSelectUser", () => {
+    const onSelectUser = vi.fn();
+    render(
+      <MessageRow
+        {...baseProps}
+        onSelectUser={onSelectUser}
+        isFirst={true}
+        message={plain({ username: "alice" })}
+      />
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: "alice" }));
+    fireEvent.click(screen.getByRole("button", { name: "alice 메시지 필터" }));
+    expect(onSelectUser).toHaveBeenCalledTimes(2);
+    expect(onSelectUser).toHaveBeenNthCalledWith(1, "alice");
+    expect(onSelectUser).toHaveBeenNthCalledWith(2, "alice");
   });
 });
