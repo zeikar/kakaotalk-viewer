@@ -8,7 +8,7 @@ KakaoTalk viewer. 카카오톡 내보내기 뷰어.
 
 ## 데모
 
-[https://zeikar.github.io/kakaotalk-viewer](https://zeikar.github.io/kakaotalk-viewer)
+[https://zeikar.dev/kakaotalk-viewer](https://zeikar.dev/kakaotalk-viewer)
 
 <img src="./docs/assets/kakaotalk-viewer-demo.png" alt="KakaoTalk Viewer demo screenshot" width="720">
 
@@ -28,7 +28,7 @@ KakaoTalk viewer. 카카오톡 내보내기 뷰어.
 
 ## 사용 방법
 
-1. [KakaoTalk Viewer](https://zeikar.github.io/kakaotalk-viewer)를 엽니다.
+1. [KakaoTalk Viewer](https://zeikar.dev/kakaotalk-viewer)를 엽니다.
 2. 카카오톡에서 대화를 내보낸 뒤 생성된 `.txt` 또는 `.csv` 파일을 선택합니다.
 3. 사용자 목록에서 본인의 이름을 선택합니다.
 4. 검색, 날짜 이동, 스크롤을 사용해 대화를 확인합니다.

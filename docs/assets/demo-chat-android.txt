@@ -12,4 +12,4 @@ KakaoTalk Viewer 데모방 카카오톡 대화
 2026년 4월 25일 오후 3:24, 지민 : 파일은 서버로 업로드되지 않고 로컬 브라우저에서만 렌더링됩니다.
 2026년 4월 25일 오후 3:25, 수아 : 여러 줄 메시지도 이렇게 보여주면 좋겠다.
 README 스크린샷이랑 OG 이미지에 쓰기 딱 좋게.
-2026년 4월 25일 오후 3:26, 나 : 데모 주소는 https://zeikar.github.io/kakaotalk-viewer/
+2026년 4월 25일 오후 3:26, 나 : 데모 주소는 https://zeikar.dev/kakaotalk-viewer/

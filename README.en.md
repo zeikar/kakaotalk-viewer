@@ -8,7 +8,7 @@ KakaoTalk Viewer is an open-source KakaoTalk chat export viewer. Open your expor
 
 ## Demo
 
-[https://zeikar.github.io/kakaotalk-viewer](https://zeikar.github.io/kakaotalk-viewer)
+[https://zeikar.dev/kakaotalk-viewer](https://zeikar.dev/kakaotalk-viewer)
 
 <img src="./docs/assets/kakaotalk-viewer-demo.png" alt="KakaoTalk Viewer demo screenshot showing a KakaoTalk exported chat rendered in a browser" width="720">
 
@@ -28,7 +28,7 @@ Your chat file is not uploaded to a server. KakaoTalk Viewer reads and renders t
 
 ## How to Use
 
-1. Open [KakaoTalk Viewer](https://zeikar.github.io/kakaotalk-viewer).
+1. Open [KakaoTalk Viewer](https://zeikar.dev/kakaotalk-viewer).
 2. Export a KakaoTalk conversation and select the generated `.txt` or `.csv` file.
 3. Choose your own name from the user list.
 4. Browse the conversation with search, date navigation, and scrolling.
