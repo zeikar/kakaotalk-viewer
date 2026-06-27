@@ -5,3 +5,6 @@ dist
 .vite
 demo/
 *.tsbuildinfo
+
+# 로컬 테스트용 카카오톡 export (커밋하지 않음)
+.local/
